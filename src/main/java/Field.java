@@ -1,7 +1,7 @@
 public class Field<T> {
 
     private T t;
-    String type;
+    private String type;
 
     public Field(){}
     public Field(String type){

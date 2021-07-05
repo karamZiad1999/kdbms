@@ -1,0 +1,3 @@
+primary key:Integer
+name:String
+age:Integer

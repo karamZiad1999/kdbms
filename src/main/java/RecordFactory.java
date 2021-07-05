@@ -6,8 +6,14 @@ import java.util.Map;
 public class RecordFactory {
     private HashMap<String, Field> fields;
     RandomAccessFile metaDataSrc;
-    public RecordFactory(RandomAccessFile metaDataSrc){
-        this.metaDataSrc = metaDataSrc;
+
+    public RecordFactory(String metaDataSrc){
+        try {
+            this.metaDataSrc = new RandomAccessFile(metaDataSrc, "rw");
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        fields = new HashMap<String,Field>();
         initializeFields();
     }
 
@@ -16,8 +22,10 @@ public class RecordFactory {
         String [] fieldMetaData;
 
         try{
+            int i = 0;
             while((line = metaDataSrc.readLine())!= null){
                 fieldMetaData = line.split(":");
+
 
                 switch(fieldMetaData[1]){
                     case "Integer":
@@ -48,6 +56,7 @@ public class RecordFactory {
                         System.out.println("ERROR: field type invalid ");
                         break;
                 }
+
             }
         }catch(IOException e){
             System.out.println(e);
