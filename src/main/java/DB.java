@@ -5,20 +5,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
-public class DB {
-    HashMap<String, Table> tables;
+ public class DB {
+    private static DB database;
+    private HashMap<String, Table> tables;
 
-    public DB(){
+    private  DB(){
         tables = new HashMap<String, Table>();
     }
 
-    public void createTable(String tableName, String tableSrc, String metaDataSrc){
-        tables.put(tableName, new Table(tableSrc, metaDataSrc));
-    }
+   public static DB getInstance(){
+        if(database == null) database = new DB();
+        return database;
+   }
 
     public void getRecord(String tableName, int primaryKey){
+
         Table temp = tables.get(tableName);
         temp.getRecord(primaryKey);
 
     }
+
+    public void addTable(String tableName, String tableSrc, String metaDataSrc, String recordIndex){
+
+    }
+//
+//    public void isValidTableName(){
+//
+//    }
+
 }
