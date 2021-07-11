@@ -1,19 +1,19 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RecordFactory {
-    private HashMap<String, Field> fields;
+    private LinkedHashMap<String, Field> fields;
     RandomAccessFile metaDataSrc;
 
-    public RecordFactory(String metaDataSrc){
+    public RecordFactory(String tableName){
         try {
-            this.metaDataSrc = new RandomAccessFile(metaDataSrc, "rw");
+            this.metaDataSrc = new RandomAccessFile(tableName + "-metaData.kdb", "rw");
         }catch(Exception e){
             System.out.println(e);
         }
-        fields = new HashMap<String,Field>();
+        fields = new LinkedHashMap<String,Field>();
         initializeFields();
     }
 
@@ -26,36 +26,7 @@ public class RecordFactory {
             while((line = metaDataSrc.readLine())!= null){
                 fieldMetaData = line.split(":");
 
-
-                switch(fieldMetaData[1]){
-                    case "Integer":
-                        fields.put(fieldMetaData[0], new Field<Integer>("Integer"));
-                        break;
-
-                    case "String":
-                        fields.put(fieldMetaData[0], new Field<String>("String"));
-                        break;
-
-                    case "Long":
-                        fields.put(fieldMetaData[0], new Field<Long>("Long"));
-                        break;
-
-                    case "Boolean":
-                        fields.put(fieldMetaData[0], new Field<Boolean>("Boolean"));
-                        break;
-
-                    case "Float":
-                        fields.put(fieldMetaData[0], new Field<Float>("Float"));
-                        break;
-
-                    case "Double":
-                        fields.put(fieldMetaData[0], new Field<Double>("Double"));
-                        break;
-
-                    default:
-                        System.out.println("ERROR: field type invalid ");
-                        break;
-                }
+                fields.put(fieldMetaData[0], new Field(fieldMetaData[1]));
 
             }
         }catch(IOException e){
@@ -63,13 +34,13 @@ public class RecordFactory {
         }
     }
 
-    public HashMap<String, Field> copyHashMapTemplate(){
+    public LinkedHashMap<String, Field> copyHashMapTemplate(){
 
-        HashMap<String, Field> clone = new HashMap<String, Field>();
+        LinkedHashMap<String, Field> clone = new LinkedHashMap<String, Field>();
 
         for(Map.Entry<String, Field> entry : fields.entrySet()){
 
-            clone.put(entry.getKey(), new Field(entry.getValue().getType(), entry.getValue().getElement()));
+            clone.put(entry.getKey(), new Field(entry.getValue().getType(), entry.getValue().getValue()));
         }
 
         return clone;

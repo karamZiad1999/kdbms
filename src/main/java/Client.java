@@ -25,10 +25,16 @@ public class Client{
 
                 sc.useDelimiter(";");
                 String input = "";
+                boolean running = true;
 
-                if(sc.hasNext()) input = sc.next();
-                input = input.replace("\n", " ");
-                out.println(input);
+                while(running){
+                    if(sc.hasNext()) input = sc.next();
+                    if(input.equalsIgnoreCase("esc")) break;
+                    input = input.replace("\n", " ");
+                    out.println(input);
+
+                }
+
 
 
 

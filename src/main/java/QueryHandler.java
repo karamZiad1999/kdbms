@@ -12,10 +12,10 @@ public class QueryHandler {
 
     }
 
-    public void handleAction(Create createObject){
+    public void handleAction(Create create){
         try{
 
-            String tableName = createObject.getTableName();
+            String tableName = create.getTableName();
             tableSrc = new File(tableName+".kdb");
             metaDataSrc = new FileWriter( tableName + "-metaData.kdb");
             indexSrc = new File(tableName + "-indexSrc.kdb");
@@ -23,10 +23,26 @@ public class QueryHandler {
             tableSrc.createNewFile();
             indexSrc.createNewFile();
 
-            metaDataSrc.write(createObject.getMetaDataInString());
-            metaDataSrc.close();
+            metaDataSrc.write(create.getMetaDataInString());
+
        }catch(IOException e){
             System.out.println(e);
+        }finally {
+            try{
+                metaDataSrc.close();
+            }catch (IOException e){
+                System.out.println(e);
+            }
+
         }
+    }
+
+    public void handleAction(Insert insert){
+
+        database.insertRecord(insert.getTableName(), insert.getPrimaryKey(), insert.getRecordBlock());
+    }
+
+    public void handleAction(Delete deleteAction){
+        database.deleteRecord(deleteAction.getTableName(), deleteAction.getField(), deleteAction.getCondition() ,  deleteAction.getValue());
     }
 }

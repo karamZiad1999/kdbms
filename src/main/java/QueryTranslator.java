@@ -12,7 +12,6 @@ public class QueryTranslator {
 
     public void translateQuery(String query){
         queryKeywords = new QueryKeywords(query);
-
         String keywords;
         if(queryKeywords.hasNext())
         {
@@ -23,15 +22,17 @@ public class QueryTranslator {
                     break;
 
                 case "insert":
-                    Insert insertAction = new Insert();
+                    Insert insertAction = new Insert(queryKeywords);
+                    queryHandler.handleAction(insertAction);
                     break;
 
                 default:
                     return;
 
-//                case "delete":
-////                    Create createAction = new Create();
-//                    break;
+                case "delete":
+                    Delete deleteAction = new Delete(queryKeywords);
+                    queryHandler.handleAction(deleteAction);
+                    break;
 
 //                case "select":
 //                    Create createAction = new Create();

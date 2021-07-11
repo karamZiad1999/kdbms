@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Create implements Action{
+public class Create {
 
     private String tableName;
     private HashMap<String, String> fieldMetaData;
