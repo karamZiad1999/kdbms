@@ -1,4 +1,4 @@
-import com.sun.security.ntlm.Server;
+import SQL.QueryTranslator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,23 +9,24 @@ import java.net.Socket;
 public class ServerThread extends Thread{
     Socket socket;
     QueryTranslator queryTranslator;
-    public ServerThread(Socket socket){
-        this.socket = socket;
-    }
 
+    public ServerThread(Socket socket){this.socket = socket;}
 
     public void run(){
         PrintWriter out = null;
         BufferedReader in = null;
         queryTranslator = new QueryTranslator();
         System.out.println("running thread");
+
         try{
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String query = in.readLine();
-            queryTranslator.translateQuery(query);
 
-
+            while(true){
+                String query = in.readLine();
+                if(query.equalsIgnoreCase("esc")) break;
+                queryTranslator.translateQuery(query);
+            }
         }catch(
                 IOException e){
             System.out.println(e);}
@@ -38,9 +39,6 @@ public class ServerThread extends Thread{
                 System.out.println(e);
             }
         }
-
-
     }
-
-    }
+}
 
