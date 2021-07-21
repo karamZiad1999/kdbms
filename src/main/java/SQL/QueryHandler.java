@@ -28,7 +28,7 @@ public class QueryHandler {
         database.deleteRecord(deleteAction.getTableName(), deleteAction.getField(), deleteAction.getCondition() ,  deleteAction.getValue());
     }
 
-    public void handleAction(Update updateAction){
-        database.updateRecord(updateAction.getTableName(),updateAction.getField(),updateAction.getCondition() , updateAction.getValue(),updateAction.getUpdates());
-    }
+//    public void handleAction(Update updateAction){
+//        database.updateRecord(updateAction.getTableName(),updateAction.getField(),updateAction.getCondition() , updateAction.getValue(),updateAction.getUpdates());
+//    }
 }

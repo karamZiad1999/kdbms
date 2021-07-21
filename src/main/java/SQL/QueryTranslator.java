@@ -35,11 +35,11 @@ public class QueryTranslator {
                     Delete deleteAction = new Delete(queryKeywords);
                     queryHandler.handleAction(deleteAction);
                     break;
-
-                case "update":
-                    Update updateAction = new Update(queryKeywords);
-                    queryHandler.handleAction(updateAction);
-                    break;
+//
+//                case "update":
+//                    Update updateAction = new Update(queryKeywords);
+//                    queryHandler.handleAction(updateAction);
+//                    break;
 
 //                case "select":
 //                    SQL.Create createAction = new SQL.Create();

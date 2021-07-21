@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
 
 public class Table {
 
@@ -16,6 +17,7 @@ public class Table {
     private IndexManager indexManager;
     private HashMap<String , BlockInfo> indexMap;
     private HashMap<String, BlockInfo> deletedRecordsMap;
+    private ReadWriteLock tableLock;
 
     public Table(String tableName){
         makeInstances(tableName);
@@ -115,140 +117,67 @@ public class Table {
 
     }
 
-//    public void selectRecord(String field, String condition, String value){
-//        SelectionManager selectionManager = new SelectionManager(field, condition, value);
-//        selectionManager.returnIfFound();
-//    }
 
-    public void deleteRecord(String field, String condition, String value){
-        DeletionManager deletionManager = new DeletionManager(field, condition, value);
-        deletionManager.deleteIfFound();
-    }
 
-    private class DeletionManager{
-
-        String primaryKeyField;
-        String field;
-        String condition;
-        String value;
-
-        public DeletionManager(String field, String condition, String value){
-            this.field = field;
-            this.condition = condition;
-            this.value = value;
-            primaryKeyField = recordFactory.getPrimaryKey();
+        public void lockTableRead(){
+            tableLock.readLock().lock();
         }
 
-        public void deleteIfFound(){
-            if(isFieldPrimaryKey()) deleteUsingPrimaryKey();
-            else deleteUsingCondition();
+        public void lockTableWrite(){
+            tableLock.writeLock().lock();
         }
 
-        private boolean isFieldPrimaryKey(){return field.equalsIgnoreCase(primaryKeyField);}
-
-        private void deleteUsingPrimaryKey(){
-            BlockInfo blockInfo = getBlockInfo();
-            if(hasInstance(blockInfo)) deleteRecord(value, blockInfo);
+        public void unlockTableWrite(){
+            tableLock.writeLock().unlock();
         }
 
-        private BlockInfo getBlockInfo(){return indexMap.remove(value);}
+        public boolean isFieldPrimaryKey(String fieldName){
+            return fieldName.equalsIgnoreCase(recordFactory.getPrimaryKey());
+        }
 
-        private void deleteRecord(String value, BlockInfo blockInfo){
+        public BlockInfo getBlockInfo(String primaryKey){
+            return indexMap.remove(primaryKey);
+        }
+
+        public void removeRecordIndex(String primaryKey){
+            indexMap.remove(primaryKey);
+        }
+        public void deleteRecord(String primaryKey){
+            BlockInfo blockInfo = indexMap.get(primaryKey);
             indexManager.deleteRecord(blockInfo.getIndexByteOffset());
-            deletedRecordsMap.put(value, blockInfo);
+            deletedRecordsMap.put(primaryKey, blockInfo);
         }
 
-        private void deleteUsingCondition(){
-            Iterator recordIterator = indexMap.entrySet().iterator();
+        private class TableRecordIterator implements RecordIterator {
+            private Iterator iterator;
 
-            while (recordIterator.hasNext()) {
-                Map.Entry entry = (Map.Entry)recordIterator.next();
+            public TableRecordIterator(){
+                iterator = indexMap.entrySet().iterator();
+            }
+
+            public Record getNextRecord(){
+                Map.Entry entry = (Map.Entry)iterator.next();
                 String primaryKey = (String) entry.getKey();
                 cacheRecord(primaryKey);
-                Record record = cache.getRecord(primaryKey);
+                return cache.getRecord(primaryKey);
+            }
 
-                if(hasInstance(record)) deleteIfMatch(record, recordIterator, primaryKey);
+            public boolean hasNext(){
+                return iterator.hasNext();
+            }
+
+            public void deleteRecord(){
+                iterator.remove();
             }
         }
 
-        private void deleteIfMatch(Record record, Iterator recordIterator, String primaryKey){
-            if(conditionApplies(record , field, condition, value)){
-                System.out.println("deleted");
-                BlockInfo blockInfo = indexMap.get(primaryKey);
-                recordIterator.remove();
-                indexManager.deleteRecord(blockInfo.getIndexByteOffset());
-                deletedRecordsMap.put(primaryKey, blockInfo);
-            }
+        public TableRecordIterator getRecordIterator(){
+            return new TableRecordIterator();
         }
 
-        private boolean hasInstance(Object obj){return (obj != null);}
-    }
 
 
-    public boolean conditionApplies(Record record, String field, String condition, String value){
-        return record.checkCondition(field, condition, value);
-    }
 
-    public void updateRecord(String field, String condition, String value, HashMap<String,String> updates){
-        UpdateManager updateManager = new UpdateManager(field, condition, value, updates);
-        updateManager.updateIfFound();
-    }
-
-
-    private class UpdateManager{
-
-
-        String primaryKeyField;
-        String field;
-        String condition;
-        String value;
-        HashMap<String,String> updates;
-
-            public UpdateManager(String field, String condition, String value, HashMap<String,String> updates){
-                this.field = field;
-                this.condition = condition;
-                this.value = value;
-                primaryKeyField = recordFactory.getPrimaryKey();
-                this.updates = updates;
-            }
-
-            public void updateIfFound(){
-                if(isFieldPrimaryKey()) updateUsingPrimaryKey();
-                else updateUsingCondition();
-            }
-
-            private boolean isFieldPrimaryKey(){return field.equalsIgnoreCase(primaryKeyField);}
-
-            private void updateUsingPrimaryKey(){
-                cacheRecord(value);
-                Record record = cache.getRecord(value);
-                record.updateRecord(updates);
-                tableManager.printToFile(record.getRecordBlock().getBytes());
-            }
-
-            private BlockInfo getBlockInfo(){return indexMap.remove(value);}
-
-            private void updateUsingCondition(){
-                Iterator recordIterator = indexMap.entrySet().iterator();
-
-                while (recordIterator.hasNext()) {
-                    Map.Entry entry = (Map.Entry)recordIterator.next();
-                    String primaryKey = (String) entry.getKey();
-                    cacheRecord(primaryKey);
-                    Record record = cache.getRecord(primaryKey);
-
-                    if(hasInstance(record)) updateIfMatch(record, recordIterator, primaryKey);
-                }
-            }
-
-            private void updateIfMatch(Record record, Iterator recordIterator, String primaryKey){
-                if(conditionApplies(record , field, condition, value)){
-                    record.updateRecord(updates);
-                }
-            }
-
-            private boolean hasInstance(Object obj){return (obj != null);}
-        }
 
 
 }

@@ -10,6 +10,7 @@ public class KDBMS {
     private HashMap<String, Table> tables;
     private Set<String> tableSet;
 
+
     private KDBMS(){
         tables = new HashMap<String, Table>();
         tableSet = new HashSet<String>();
@@ -90,14 +91,19 @@ public class KDBMS {
     public void insertRecord(String tableName, String primaryKey, String recordData){
 
         Table table;
-
+        InsertLock insertLock;
         if((table =  tables.get(tableName)) == null ){
             if(tableSet.contains(tableName)) fetchTable(tableName);
             else return;
             table = tables.get(tableName);
         }
 
+        insertLock = new InsertLock(table);
+
+//        insertLock.lock();
         table.insertRecord(primaryKey, recordData);
+//        insertLock.unlock();
+
     }
 
     public void initializeTableSet(){
@@ -123,22 +129,23 @@ public class KDBMS {
             table = tables.get(tableName);
         }
 
-        table.deleteRecord(field, condition, value);
+        DeletionManager deletionManager = new DeletionManager(table, field, condition, value);
+        deletionManager.delete();
 
     }
 
-    public void updateRecord(String tableName, String field, String condition, String value, HashMap<String,String> updates){
-
-        Table table;
-
-        if((table = tables.get(tableName)) == null ){
-            if(tableSet.contains(tableName)) fetchTable(tableName);
-            else return;
-            table = tables.get(tableName);
-        }
-
-        table.updateRecord(field, condition, value, updates);
-    }
+//    public void updateRecord(String tableName, String field, String condition, String value, HashMap<String,String> updates){
+//
+//        Table table;
+//
+//        if((table = tables.get(tableName)) == null ){
+//            if(tableSet.contains(tableName)) fetchTable(tableName);
+//            else return;
+//            table = tables.get(tableName);
+//        }
+//
+//        table.updateRecord(field, condition, value, updates);
+//    }
 
     public boolean isTableNameLegal(String tableName){
         return (!tableSet.contains(tableName));
