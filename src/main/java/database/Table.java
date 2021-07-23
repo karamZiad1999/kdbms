@@ -16,7 +16,6 @@ public class Table {
     private TableManager tableManager;
     private IndexManager indexManager;
     private HashMap<String , BlockInfo> indexMap;
-    private HashMap<String, BlockInfo> deletedRecordsMap;
     private ReadWriteLock tableLock;
 
     public Table(String tableName){
@@ -25,12 +24,12 @@ public class Table {
     }
 
     private void makeInstances(String tableName){
-        tableManager = new TableManager(tableName);
-        indexManager = new IndexManager(tableName);
+        indexMap = new HashMap<String , BlockInfo>();
+        indexManager = new IndexManager(tableName, indexMap);
+        tableManager = new TableManager(tableName, indexManager);
         recordFactory = new RecordFactory(tableName);
-        deletedRecordsMap = new HashMap<String , BlockInfo>();
-        indexMap = new  HashMap<String , BlockInfo>();
         cache = new Cache();
+
     }
 
     private void initializeIndexMap(){
@@ -41,23 +40,23 @@ public class Table {
         String [] stringRecords = records.split("\n");
 
         for(String record : stringRecords){
-
             char firstChar = record.charAt(0);
             if(firstChar == '*') addDeletedRecord(record);
             else if(firstChar == '-') continue;
             else addRecordIndex(record);
         }
+        System.out.println(indexMap.toString());
 
     }
 
     private void addRecordIndex(String record){
         String [] recordSegments = record.trim().split(" ");
-        indexMap.put(recordSegments[0] , new BlockInfo(recordSegments));
+        indexManager.addIndex(recordSegments[0] , new BlockInfo(recordSegments));
     }
 
     private void addDeletedRecord(String record){
         String [] recordSegments = record.replaceAll("\\*", " ").trim().split(" ");
-        deletedRecordsMap.put(recordSegments[0] , new BlockInfo(recordSegments));
+        indexManager.addDeletedRecord(recordSegments[0] , new BlockInfo(recordSegments));
     }
 
     public Record getRecord(String primaryKey){
@@ -72,8 +71,7 @@ public class Table {
     }
 
     public void cacheRecord(String primaryKey){
-
-        BlockInfo blockInfo = indexMap.get(primaryKey);
+        BlockInfo blockInfo = indexManager.getBlockInfo(primaryKey);
         if(blockInfo == null) return;
         cache.addRecord(new Record(recordFactory.copyHashMapTemplate(), primaryKey), tableManager.getBlock(blockInfo.getByteOffset(), blockInfo.getBlockSize()));
 
@@ -81,103 +79,63 @@ public class Table {
 
     public void insertRecord (String primaryKey, String recordData){
         byte[] block = recordData.getBytes();
-        printToFile(primaryKey, block);
+        tableManager.insertRecord(primaryKey, recordData);
         cache.addRecord(new Record(recordFactory.copyHashMapTemplate(), primaryKey), block);
     }
 
-    private void printToFile(String primaryKey , byte[] block){
+    public void updateRecord(String primaryKey, String recordBlock){
+       tableManager.updateRecord(primaryKey, recordBlock);
+    }
 
-        long byteOffset = -1;
-        long indexByteOffset = -1;
+    public void lockTableRead(){
+        tableLock.readLock().lock();
+    }
 
-        if(!deletedRecordsMap.isEmpty()){
-            for(Map.Entry<String, BlockInfo> entry : deletedRecordsMap.entrySet()){
-                if(block.length <= entry.getValue().getBlockSize()){
-                    byteOffset = entry.getValue().getByteOffset();
-                    indexByteOffset = entry.getValue().getIndexByteOffset();
-                    indexManager.permanentlyDelete(indexByteOffset);
-                    deletedRecordsMap.remove(entry.getKey());
-                    break;
-                }
-            }
-        }
+    public void lockTableWrite(){
+        tableLock.writeLock().lock();
+    }
 
-        if(byteOffset == -1){
-            byteOffset = tableManager.printToFile(block);
-        }
-        else{
-            tableManager.printToFile(block, byteOffset);
-        }
+    public void unlockTableWrite(){
+        tableLock.writeLock().unlock();
+    }
 
-        BlockInfo blockInfo = new BlockInfo(primaryKey, byteOffset , block.length );
-        indexMap.put(primaryKey, blockInfo);
-
-        blockInfo.setIndexByteOffset(indexManager.getFileLength());
-        indexManager.printIndexRecord(blockInfo.getIndexRecord());
-
+    public boolean isFieldPrimaryKey(String fieldName){
+        return fieldName.equalsIgnoreCase(recordFactory.getPrimaryKey());
     }
 
 
 
-        public void lockTableRead(){
-            tableLock.readLock().lock();
+    public void removeRecordIndex(String primaryKey){
+        indexMap.remove(primaryKey);
+    }
+    public void deleteRecord(String primaryKey){
+        BlockInfo blockInfo = indexMap.get(primaryKey);
+        indexManager.deleteRecord(blockInfo.getIndexByteOffset());
+        indexManager.addDeletedRecord(primaryKey, blockInfo);
+    }
+
+    private class TableRecordIterator implements RecordIterator {
+        private Iterator iterator;
+
+        public TableRecordIterator(){
+            iterator = indexMap.entrySet().iterator();
         }
 
-        public void lockTableWrite(){
-            tableLock.writeLock().lock();
+        public Record getNextRecord(){
+            Map.Entry entry = (Map.Entry)iterator.next();
+            String primaryKey = (String) entry.getKey();
+            cacheRecord(primaryKey);
+            return cache.getRecord(primaryKey);
         }
-
-        public void unlockTableWrite(){
-            tableLock.writeLock().unlock();
+        public boolean hasNext(){
+            return iterator.hasNext();
         }
-
-        public boolean isFieldPrimaryKey(String fieldName){
-            return fieldName.equalsIgnoreCase(recordFactory.getPrimaryKey());
+        public void deleteRecord(){
+            iterator.remove();
         }
+    }
 
-        public BlockInfo getBlockInfo(String primaryKey){
-            return indexMap.remove(primaryKey);
-        }
-
-        public void removeRecordIndex(String primaryKey){
-            indexMap.remove(primaryKey);
-        }
-        public void deleteRecord(String primaryKey){
-            BlockInfo blockInfo = indexMap.get(primaryKey);
-            indexManager.deleteRecord(blockInfo.getIndexByteOffset());
-            deletedRecordsMap.put(primaryKey, blockInfo);
-        }
-
-        private class TableRecordIterator implements RecordIterator {
-            private Iterator iterator;
-
-            public TableRecordIterator(){
-                iterator = indexMap.entrySet().iterator();
-            }
-
-            public Record getNextRecord(){
-                Map.Entry entry = (Map.Entry)iterator.next();
-                String primaryKey = (String) entry.getKey();
-                cacheRecord(primaryKey);
-                return cache.getRecord(primaryKey);
-            }
-
-            public boolean hasNext(){
-                return iterator.hasNext();
-            }
-
-            public void deleteRecord(){
-                iterator.remove();
-            }
-        }
-
-        public TableRecordIterator getRecordIterator(){
-            return new TableRecordIterator();
-        }
-
-
-
-
-
-
+    public TableRecordIterator getRecordIterator(){
+        return new TableRecordIterator();
+    }
 }

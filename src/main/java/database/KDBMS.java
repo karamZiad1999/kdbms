@@ -108,15 +108,15 @@ public class KDBMS {
 
     public void initializeTableSet(){
 
-                try(RandomAccessFile tableSetSrc = new RandomAccessFile("tableSet.kdb", "rw");)
-                {
-                    String tableName;
-                    while((tableName = tableSetSrc.readLine()) != null) tableSet.add(tableName);
+        try(RandomAccessFile tableSetSrc = new RandomAccessFile("tableSet.kdb", "rw");)
+        {
+            String tableName;
+            while((tableName = tableSetSrc.readLine()) != null) tableSet.add(tableName);
 
 
-                }catch(IOException e){
-                    System.out.println(e);
-                }
+        }catch(IOException e){
+            System.out.println(e);
+        }
     }
 
     public void deleteRecord(String tableName, String field, String condition, String value){
@@ -134,20 +134,49 @@ public class KDBMS {
 
     }
 
-//    public void updateRecord(String tableName, String field, String condition, String value, HashMap<String,String> updates){
-//
-//        Table table;
-//
-//        if((table = tables.get(tableName)) == null ){
-//            if(tableSet.contains(tableName)) fetchTable(tableName);
-//            else return;
-//            table = tables.get(tableName);
-//        }
-//
-//        table.updateRecord(field, condition, value, updates);
-//    }
+    public void updateRecord(String tableName, String field, String condition, String value, HashMap<String,String> updates){
+
+        Table table;
+
+        if((table = tables.get(tableName)) == null ){
+            if(tableSet.contains(tableName)) fetchTable(tableName);
+            else return;
+            table = tables.get(tableName);
+        }
+
+        UpdateManager updateManager = new UpdateManager(table, field, condition, value, updates);
+        updateManager.update();
+
+    }
 
     public boolean isTableNameLegal(String tableName){
         return (!tableSet.contains(tableName));
+    }
+
+    public void selectAllRecords(String tableName, PrintWriter out){
+        Table table;
+
+        if((table = tables.get(tableName)) == null ){
+            if(tableSet.contains(tableName)) fetchTable(tableName);
+            else return;
+            table = tables.get(tableName);
+        }
+
+        SelectionManager selectionManager = new SelectionManager(table, out);
+        selectionManager.selectAll();
+    }
+
+    public void selectRecord(String tableName, String field, String condition, String value, PrintWriter out){
+        Table table;
+
+        if((table = tables.get(tableName)) == null ){
+            if(tableSet.contains(tableName)) fetchTable(tableName);
+            else return;
+            table = tables.get(tableName);
+        }
+
+        SelectionManager selectionManager = new SelectionManager(table, field, condition, value, out);
+        selectionManager.select();
+
     }
 }

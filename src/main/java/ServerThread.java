@@ -15,13 +15,12 @@ public class ServerThread extends Thread{
     public void run(){
         PrintWriter out = null;
         BufferedReader in = null;
-        queryTranslator = new QueryTranslator();
         System.out.println("running thread");
 
         try{
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+            queryTranslator = new QueryTranslator(out);
             while(true){
                 String query = in.readLine();
                 if(query.equalsIgnoreCase("esc")) break;

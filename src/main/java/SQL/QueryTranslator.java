@@ -2,14 +2,18 @@ package SQL;
 
 import database.KDBMS;
 
+import java.io.PrintWriter;
+
 public class QueryTranslator {
     QueryHandler queryHandler;
     QueryKeywords queryKeywords;
     KDBMS database;
+    PrintWriter out;
 
-    public QueryTranslator(){
+    public QueryTranslator(PrintWriter out){
         database = KDBMS.getInstance();
         queryHandler = new QueryHandler();
+        this.out = out;
     }
 
     public void translateQuery(String query){
@@ -35,24 +39,21 @@ public class QueryTranslator {
                     Delete deleteAction = new Delete(queryKeywords);
                     queryHandler.handleAction(deleteAction);
                     break;
-//
-//                case "update":
-//                    Update updateAction = new Update(queryKeywords);
-//                    queryHandler.handleAction(updateAction);
-//                    break;
 
-//                case "select":
-//                    SQL.Create createAction = new SQL.Create();
-//                    break;
+                case "update":
+                    Update updateAction = new Update(queryKeywords);
+                    queryHandler.handleAction(updateAction);
+                    break;
 
-//            }
+                case "select":
+                    Select selectAction = new Select(queryKeywords);
+                    queryHandler.handleAction(selectAction, out);
+                    break;
+
+            }
             }
 
 
         }
     }
 
-
-
-
-}

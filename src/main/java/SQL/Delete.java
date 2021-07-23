@@ -35,7 +35,7 @@ public class Delete {
 
     private void parseCondition(){
 
-       condition = queryKeywords.getNextKeyword();
+        condition = queryKeywords.getNextKeyword();
         if(queryKeywords.hasNext()) parseValue();
 
     }

@@ -28,7 +28,7 @@ public class DeletionManager {
         Record record;
         while(recordIterator.hasNext()){
             record = recordIterator.getNextRecord();
-            if(record.checkCondition(field, condition, value)) {
+            if(record.checkCondition(field, condition, value)){
                 table.deleteRecord(record.getPrimaryKey());
                 recordIterator.deleteRecord();
             }

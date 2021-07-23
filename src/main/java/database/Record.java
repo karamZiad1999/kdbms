@@ -54,5 +54,17 @@ public class Record {
         return block.toString();
     }
 
+    public String printRecord(){
+        StringBuilder record = new StringBuilder();
+        for(Map.Entry<String, Field> entry : fields.entrySet() ){
+            record.append(entry.getKey());
+            record.append(" : ");
+            record.append(entry.getValue().getValue());
+            record.append(" |");
+        }
+        record.append("\n");
+        return record.toString();
+    }
+
 
 }
