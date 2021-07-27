@@ -1,42 +1,30 @@
 package SQL;
-import database.KDBMS;
+import Database.KDBMS;
 
 import java.io.PrintWriter;
-
+import SQL.Statement.*;
 public class QueryHandler {
 
     KDBMS database;
+    PrintWriter out;
+    QueryLog queryLog;
 
-
-    public QueryHandler(){
+    public QueryHandler(PrintWriter out){
         database = KDBMS.getInstance();
+        this.out = out;
+        queryLog = QueryLog.getInstance();
     }
 
-    public void handleAction(Create create){
-        if(database.isTableNameLegal(create.getTableName())){
-            database.createTable(create.getTableName(), create.getMetaDataInString());
-            System.out.println("table created");
-        }
+    public void handleQuery(String query){
+        Statement statement = StatementFactory.makeStatement(query);
+        statement.setOutputStream(out);
 
-
+        queryLog.logQuery(this.toString(), query);
+        execute(statement);
+        queryLog.markQueryExecuted(this.toString(), query);
     }
 
-    public void handleAction(Insert insert){
-
-        database.insertRecord(insert.getTableName(), insert.getPrimaryKey(), insert.getRecordBlock());
-    }
-
-    public void handleAction(Delete deleteAction){
-        database.deleteRecord(deleteAction.getTableName(), deleteAction.getField(), deleteAction.getCondition() ,  deleteAction.getValue());
-    }
-
-    public void handleAction(Update updateAction){
-        database.updateRecord(updateAction.getTableName(),updateAction.getField(),updateAction.getCondition() , updateAction.getValue(),updateAction.getUpdates());
-    }
-
-    public void handleAction(Select selectAction, PrintWriter out){
-        if(selectAction.isCondition()) database.selectRecord(selectAction.getTableName(), selectAction.getField(), selectAction.getCondition(), selectAction.getValue(), out);
-        else database.selectAllRecords(selectAction.getTableName(), out);
-
+    public void execute(Statement statement){
+        database.execute(statement);
     }
 }
