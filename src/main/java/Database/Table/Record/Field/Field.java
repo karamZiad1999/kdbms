@@ -1,23 +1,21 @@
 package Database.Table.Record.Field;
 
+import Database.Table.Record.Field.ConditionChecker.ConditionChecker;
+import Database.Table.Record.Field.ConditionChecker.ConditionCheckerFactory;
+
 public class Field {
 
     private String value;
     private String type;
+    private ConditionChecker conditionChecker;
 
-
-    public Field(){}
 
     public Field(String type){
         this.type = type;
+        conditionChecker = new ConditionCheckerFactory().getInstance(type);
     }
 
-    public Field(String type, String value){
-        this.value = value;
-        this.type = type;
-    }
-
-    public void set(String value)
+    public void setValue(String value)
     {
         this.value = value;
     }
@@ -26,122 +24,10 @@ public class Field {
 
     public String getType(){return type;}
 
-    public boolean checkCondition(String condition, String value){
-        switch(condition){
+    public boolean checkCondition(String condition, String comparedValue){
 
-            case "=":
-                return checkEquality(value);
-            case "<":
-                return checkIfLess(value);
-            case ">":
-                return checkIfGreater(value);
-            case "<=":
-                return checkIfLessOrEqual(value);
-            case ">=":
-                return checkIfGreaterOrEqual(value);
-            default:
-                return false;
-        }
+        return conditionChecker.checkCondition(value, condition, comparedValue);
     }
 
 
-    private boolean checkEquality(String comparedValue){
-        return value.equalsIgnoreCase(comparedValue);
-    }
-
-    private boolean checkIfGreater(String comparedValue){
-
-        switch(type){
-
-            case "Long":
-                return (Long.parseLong(value) > Long.parseLong(comparedValue));
-
-
-            case "Float":
-                return (Float.parseFloat(value) > Float.parseFloat(comparedValue));
-
-
-            case "Double":
-                return (Double.parseDouble(value) > Double.parseDouble(comparedValue));
-
-
-            case "Integer":
-                return (Integer.parseInt(value) > Integer.parseInt(comparedValue));
-
-            default:
-                return false;
-        }
-    }
-
-    private boolean checkIfLess(String comparedValue){
-
-        switch(type){
-
-            case "Long":
-                return (Long.parseLong(value) < Long.parseLong(comparedValue));
-
-
-            case "Float":
-                return (Float.parseFloat(value) < Float.parseFloat(comparedValue));
-
-
-            case "Double":
-                return (Double.parseDouble(value) < Double.parseDouble(comparedValue));
-
-
-            case "Integer":
-                return (Integer.parseInt(value) < Integer.parseInt(comparedValue));
-
-            default:
-                return false;
-        }
-    }
-
-    private boolean checkIfLessOrEqual(String comparedValue){
-
-        switch(type){
-
-            case "Long":
-                return (Long.parseLong(value) <= Long.parseLong(comparedValue));
-
-
-            case "Float":
-                return (Float.parseFloat(value) <= Float.parseFloat(comparedValue));
-
-
-            case "Double":
-                return (Double.parseDouble(value) <= Double.parseDouble(comparedValue));
-
-
-            case "Integer":
-                return (Integer.parseInt(value) <= Integer.parseInt(comparedValue));
-
-            default:
-                return false;
-        }
-    }
-
-
-    private boolean checkIfGreaterOrEqual(String comparedValue){
-
-        switch(type){
-            case "Long":
-                return (Long.parseLong(value) >= Long.parseLong(comparedValue));
-
-
-            case "Float":
-                return (Float.parseFloat(value) >= Float.parseFloat(comparedValue));
-
-
-            case "Double":
-                return (Double.parseDouble(value) >= Double.parseDouble(comparedValue));
-
-
-            case "Integer":
-                return (Integer.parseInt(value) >= Integer.parseInt(comparedValue));
-
-            default:
-                return false;
-        }
-    }
 }

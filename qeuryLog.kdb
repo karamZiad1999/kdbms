@@ -1,0 +1,4 @@
+*update karam set age = 12 where age > 0
+*select * from karam
+*update karam set age = 12 where age >= 0
+*select * from karam

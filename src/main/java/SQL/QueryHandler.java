@@ -8,23 +8,23 @@ public class QueryHandler {
     KDBMS database;
     PrintWriter out;
     QueryLog queryLog;
+    Authorization authorization;
 
-    public QueryHandler(PrintWriter out){
+    public QueryHandler(PrintWriter out, Authorization authorization){
         database = KDBMS.getInstance();
         this.out = out;
         queryLog = QueryLog.getInstance();
+        this.authorization = authorization;
     }
 
     public void handleQuery(String query){
         Statement statement = StatementFactory.makeStatement(query);
         statement.setOutputStream(out);
-
-        queryLog.logQuery(this.toString(), query);
-        execute(statement);
-        queryLog.markQueryExecuted(this.toString(), query);
-    }
-
-    public void execute(Statement statement){
-        database.execute(statement);
+        try{
+            queryLog.logQuery(this.toString(), query);
+            database.execute(statement, authorization);
+        }finally {
+            queryLog.markQueryExecuted(this.toString(), query);
+        }
     }
 }

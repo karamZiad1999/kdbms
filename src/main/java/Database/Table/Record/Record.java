@@ -2,12 +2,11 @@ package Database.Table.Record;
 
 import Database.Table.Record.Field.Field;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Record {
+public class Record{
 
     private LinkedHashMap<String, Field> fields;
     String primaryKey;
@@ -24,16 +23,12 @@ public class Record {
         return primaryKey;
     }
 
-    public void addRecord(byte[] b) {
-
-
-        String [] fieldValuesInString;
-        String blockInString = new String(b, StandardCharsets.UTF_8);
-        fieldValuesInString = blockInString.split("\n");
+    public void addRecord(String record) {
+       String [] recordSegments = record.split("\n");
 
         int i = 0;
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
-                entry.getValue().set(fieldValuesInString[i++]);
+                entry.getValue().setValue(recordSegments[i++]);
         }
     }
 
@@ -43,7 +38,7 @@ public class Record {
 
     public void updateRecord(HashMap<String, String> updates){
         for(Map.Entry<String,String> update : updates.entrySet()){
-            fields.get(update.getKey()).set(update.getValue());
+            fields.get(update.getKey()).setValue(update.getValue());
         }
     }
 

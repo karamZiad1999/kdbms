@@ -1,34 +1,35 @@
 package Database.StatementManager;
 
+import Database.Table.Record.LockableIndex;
 import Database.Table.Record.Record;
 import Database.Table.RecordIterator;
 import Database.Table.Table;
+import Database.Table.UpdatableTable;
 import SQL.Statement.UpdateStatement;
-
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Stack;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class UpdateManager implements StatementManager{
+public class UpdateManager implements StatementManager {
     String field;
     String condition;
     String value;
-    HashMap<String,String> updates;
-    Table table;
-    Stack<ReentrantReadWriteLock> locks;
+    HashMap<String, String> updates;
+    UpdatableTable table;
     PrintWriter out;
+    LinkedList<LockableIndex> recordIndexList;
 
-    public UpdateManager(UpdateStatement update, Table table) {
+    public UpdateManager(UpdateStatement update, Table table){
         field = update.getField();
         condition = update.getCondition();
         value = update.getValue();
         updates = update.getUpdates();
-        table = table;
-        locks = new Stack<ReentrantReadWriteLock>();
+        this.table = table;
         out = update.getOutputStream();
+        recordIndexList = new LinkedList<LockableIndex>();
     }
 
     public void execute(){
@@ -38,42 +39,61 @@ public class UpdateManager implements StatementManager{
     }
 
     private void updateUsingPrimaryKey(){
-        updateUsingPrimaryKey(value);
-    }
-    private void updateUsingPrimaryKey(String primaryKey){
-        Record record = table.getRecord(primaryKey);
-        if(record != null) record.updateRecord(updates);
-        table.updateRecord(primaryKey, record.getRecordBlock());
+        Record record = table.getRecord(value);
+        if(record != null) {
+            record.updateRecord(updates);
+            table.updateRecord(value, record.getRecordBlock());
+        }
     }
 
     private void updateUsingCondition(){
-        ArrayList<String> matchingRecords = table.getRecordsWithCondition(field, condition, value);
-        if(!acquireLocks(matchingRecords)) return;
-
-        for(String primaryKey : matchingRecords){
-            {
-                updateUsingPrimaryKey(primaryKey);
-            }
+        try{
+            acquireLocks();
+            updateLockedRecords();
+        }finally {
+            releaseLocks();
         }
     }
 
-    private boolean acquireLocks(ArrayList<String> primaryKeys){
-        for(String primaryKey : primaryKeys){
-           acquireLock(primaryKey);
+    private void updateLockedRecords(){
+        for(LockableIndex lockableIndex : recordIndexList){
+            Record record = table.getRecord(lockableIndex.getPrimaryKey());
+            record.updateRecord(updates);
+            table.updateRecord(record.getPrimaryKey(), record.getRecordBlock());
         }
-        return true;
-    }
 
+    }
     private void releaseLocks(){
-        while(!locks.isEmpty()){
-            locks.pop().writeLock().unlock();
-        }
+      while(!recordIndexList.isEmpty()){
+          LockableIndex lockableIndex = recordIndexList.pop();
+          lockableIndex.writeUnlock();
+      }
     }
 
-    private void acquireLock(String primaryKey){
-        ReentrantReadWriteLock lock = table.getRecordInfo(primaryKey).getLock();
-        if(lock.writeLock().tryLock()) {
-            locks.push(lock);
+    private void acquireLocks() {
+        try {
+            table.getLock().readLock().lock();
+            RecordIterator recordIterator = table.getRecordIterator();
+
+            while (recordIterator.hasNext()) {
+                Record record = recordIterator.getNextRecord();
+                if (record.checkCondition(field, condition, value)) {
+                    LockableIndex index = table.getRecordInfo(record.getPrimaryKey());
+                    ReentrantReadWriteLock.WriteLock lock = index.getLock().writeLock();
+                    try {
+                        if (lock.tryLock(120, TimeUnit.SECONDS)) {
+                            recordIndexList.add(index);
+                        } else {
+                            releaseLocks();
+                            updateUsingCondition();
+                        }
+                    } catch (InterruptedException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
+        }finally{
+            table.getLock().readLock().unlock();
         }
     }
 }

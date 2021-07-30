@@ -1,25 +1,27 @@
 package Database.StatementManager;
 
 import Database.Table.Table;
+import SQL.Authorization;
 import SQL.Statement.*;
 
 public class StatementManagerFactory {
-    public static StatementManager makeStatementManager(Statement statement, Table table) {
+    public static StatementManager makeStatementManager(Statement statement, Table table, Authorization authorization){
+        StatementManager statementManager = null;
         if(statement instanceof Create){
-            return new CreateManager((Create) statement, table);
+            if(authorization == Authorization.DATABASE_MAINTAINER) statementManager = new CreateManager((Create) statement, table);
         }
         else if (statement instanceof Insert){
-            return new InsertManager((Insert) statement, table);
+            if(authorization.compareTo(Authorization.READ_AND_WRITE) >= 0) statementManager =  new InsertManager((Insert) statement, table);
         }
         else if (statement instanceof Select){
-            return new SelectManager((Select) statement, table);
+            if(authorization.compareTo(Authorization.READ_ONLY) >= 0) statementManager =  new SelectManager((Select) statement, table);
         }
         else if (statement instanceof Update){
-            return new UpdateManager((Update) statement, table);
+            if(authorization.compareTo(Authorization.READ_AND_WRITE) >= 0) statementManager =  new UpdateManager((Update) statement, table);
         }
         else if (statement instanceof Delete){
-            return new DeleteManager((Delete) statement, table);
+            if(authorization.compareTo(Authorization.DATABASE_MAINTAINER) >= 0) statementManager =  new DeleteManager((Delete) statement, table);
         }
-        else return null;
+        return statementManager;
     }
 }

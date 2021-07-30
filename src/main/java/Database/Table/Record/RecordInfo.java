@@ -2,8 +2,7 @@ package Database.Table.Record;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class RecordInfo implements LockableRecord {
-
+public class RecordInfo implements LockableIndex {
     private long blockByteOffset;
     private int blockSize;
     private long indexByteOffset;
@@ -51,11 +50,6 @@ public class RecordInfo implements LockableRecord {
         this.blockSize = blockSize;
     }
 
-    public void setByteOffset(long byteOffset){
-
-        this.blockByteOffset = byteOffset;
-    }
-
 
     public String getIndexRecord(){
         StringBuilder indexRecord = new StringBuilder();
@@ -87,5 +81,7 @@ public class RecordInfo implements LockableRecord {
         return lock;
     }
 
-
+    public String getPrimaryKey(){
+        return primaryKey;
+    }
 }

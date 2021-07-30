@@ -1,29 +1,23 @@
 package Database.Table;
 
 import Database.Table.Record.RecordInfo;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.util.Iterator;
 
 public class TableManager {
 
-    RandomAccessFile tableSrc;
     IndexManager indexManager;
+    TableSrcManager tableSrcManager;
 
-    public TableManager(String tableName, IndexManager indexManager){
-        try {
-            this.tableSrc = new RandomAccessFile(getFilePath(tableName), "rw");
-        }catch(Exception e){
-            System.out.println(e);
-        }
-        this.indexManager = indexManager;
+    public TableManager(String tableName){
+        tableSrcManager = new TableSrcManager(tableName);
+        indexManager = new IndexManager(tableName);
     }
 
     public void insertRecord(String primaryKey, String record){
         long byteOffset = indexManager.getOverwriteRecord(record.length());
         byte [] b = record.getBytes();
-        if(byteOffset == -1) byteOffset = printToFile(b);
-        else printToFile(b, byteOffset);
+        if(byteOffset == -1) byteOffset = tableSrcManager.printToFile(b);
+        else tableSrcManager.printToFile(b, byteOffset);
         RecordInfo recordInfo = new RecordInfo(primaryKey, byteOffset, record.length());
         recordInfo.setIndexByteOffset(indexManager.getFileLength());
         indexManager.printIndexRecord(recordInfo.getIndexRecord());
@@ -32,52 +26,37 @@ public class TableManager {
 
     public void updateRecord(String primaryKey, String recordBlock){
         byte [] b = recordBlock.getBytes();
-        RecordInfo recordInfo = indexManager.getBlockInfo(primaryKey);
+        RecordInfo recordInfo = indexManager.getRecordInfo(primaryKey);
         long byteOffset = recordInfo.getByteOffset();
-        printToFile(b, byteOffset);
+        tableSrcManager.printToFile(b, byteOffset);
         recordInfo.setBlockSize(b.length);
         indexManager.printIndexRecord(recordInfo.getIndexRecord(), recordInfo.getIndexByteOffset());
     }
 
-    public byte[] getBlock(long byteOffset, int blockSize){
-        byte[] block = new byte[blockSize];
-       try{
-            tableSrc.seek(byteOffset);
-            tableSrc.read(block);
-
-       }catch(Exception e){
-           System.out.println(e);
-       }
-
-       return block;
+    public String getBlock(String primaryKey)
+    {
+        RecordInfo recordInfo = indexManager.getRecordInfo(primaryKey);
+        return tableSrcManager.getBlock(recordInfo.getByteOffset(), recordInfo.getBlockSize());
     }
 
-    public long printToFile(byte[] b)  {
-        try {
-            long length = getFileLength();
-            printToFile(b, length);
-            return length;
-        }catch(IOException e){
-            System.out.println(e);
-        }
-        return 0;
+    public RecordInfo getRecordInfo(String primaryKey){
+        return indexManager.getRecordInfo(primaryKey);
     }
 
-    public void printToFile(byte[] b, long byteOffset)  {
-        try{
-            tableSrc.seek(byteOffset);
-            tableSrc.write(b);
-        }catch (IOException e){
-            System.out.println(e);
+    public void removeIndex(String primaryKey){
+        indexManager.removeIndex(primaryKey);
+    }
+
+    public void deleteRecord(String primaryKey){
+        RecordInfo recordInfo = indexManager.removeIndex(primaryKey);
+        if(recordInfo != null) {
+            indexManager.deleteRecord(recordInfo.getIndexByteOffset());
+            indexManager.addDeletedRecord(primaryKey, recordInfo);
         }
     }
 
-    private long getFileLength()  throws IOException {
-        return tableSrc.length();
-    }
-
-    private String getFilePath(String tableName){
-        return tableName + ".kdb";
+    public Iterator getIndexIterator(){
+        return indexManager.getIndexIterator();
     }
 
 }

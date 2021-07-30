@@ -1,10 +1,13 @@
 package Database.Table;
 
+import Database.Table.Record.Record;
 import Database.Table.Record.RecordInfo;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class IndexManager {
@@ -13,17 +16,18 @@ public class IndexManager {
     private HashMap<String, RecordInfo> deletedRecordsMap;
     private HashMap<String , RecordInfo> indexMap;
 
-    public IndexManager(String tableName, HashMap<String , RecordInfo> indexMap ){
+    public IndexManager(String tableName){
         try {
             this.indexRecordSrc = new RandomAccessFile(tableName + "-index.kdb", "rw");
         }catch(Exception e){
             System.out.println(e);
         }
-        this.indexMap = indexMap;
+        indexMap = new HashMap<String, RecordInfo>();
         deletedRecordsMap = new HashMap<String , RecordInfo>();
+        initializeIndexMap();
     }
 
-    public RecordInfo getBlockInfo(String primaryKey){
+    public RecordInfo getRecordInfo(String primaryKey){
         return indexMap.get(primaryKey);
     }
 
@@ -109,5 +113,37 @@ public class IndexManager {
 
     public void addIndex(String primaryKey, RecordInfo recordInfo){
         indexMap.put(primaryKey, recordInfo);
+    }
+
+    public Iterator getIndexIterator(){
+        return indexMap.entrySet().iterator();
+    }
+
+    public RecordInfo removeIndex(String primaryKey){
+        return indexMap.remove(primaryKey);
+    }
+
+    private void initializeIndexMap(){
+        byte [] byteRecords = readAllRecords();
+        if(byteRecords.length <= 0) return;
+        String records = new String(byteRecords, StandardCharsets.UTF_8);
+        String [] stringRecords = records.split("\n");
+
+        for(String record : stringRecords){
+            char firstChar = record.charAt(0);
+            if(firstChar == '*') addDeletedRecord(record);
+            else if(firstChar == '-') continue;
+            else addRecordIndex(record);
+        }
+    }
+
+    private void addRecordIndex(String record){
+        String [] recordSegments = record.trim().split(" ");
+        addIndex(recordSegments[0] , new RecordInfo(recordSegments));
+    }
+
+    private void addDeletedRecord(String record){
+        String [] recordSegments = record.replaceAll("\\*", " ").trim().split(" ");
+        addDeletedRecord(recordSegments[0] , new RecordInfo(recordSegments));
     }
 }

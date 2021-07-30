@@ -2,6 +2,7 @@ package Database.Table.Record;
 
 import Database.Table.Record.Field.Field;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedHashMap;
@@ -10,15 +11,11 @@ import java.util.Map;
 public class RecordFactory {
 
     private LinkedHashMap<String, Field> fields;
-    RandomAccessFile metaDataSrc;
+    File metaDataSrc;
     String primaryKey;
 
     public RecordFactory(String tableName){
-        try {
-            this.metaDataSrc = new RandomAccessFile(tableName + "-metaData.kdb", "rw");
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        metaDataSrc = new File(tableName + "-metaData.kdb");
         fields = new LinkedHashMap<String,Field>();
         initializeFields();
     }
@@ -27,20 +24,17 @@ public class RecordFactory {
         String line;
         String [] fieldMetaData;
 
-        try{
+        try(RandomAccessFile metaDataSrcReader = new RandomAccessFile(metaDataSrc, "rw")){
             int i = 0;
 
-            if((line = metaDataSrc.readLine()) != null) {
-
+            if ((line = metaDataSrcReader.readLine()) != null){                 //reads primary key
                 fieldMetaData = line.split(":");
                 fields.put(fieldMetaData[0], new Field(fieldMetaData[1]));
                 primaryKey = fieldMetaData[0];
             }
-            while((line = metaDataSrc.readLine())!= null){
+            while((line = metaDataSrcReader.readLine())!= null){
                 fieldMetaData = line.split(":");
-
                 fields.put(fieldMetaData[0], new Field(fieldMetaData[1]));
-
             }
         }catch(IOException e){
             System.out.println(e);
@@ -51,7 +45,7 @@ public class RecordFactory {
         LinkedHashMap<String, Field> clone = new LinkedHashMap<String, Field>();
 
         for(Map.Entry<String, Field> entry : fields.entrySet()){
-            clone.put(entry.getKey(), new Field(entry.getValue().getType(), entry.getValue().getValue()));
+            clone.put(entry.getKey(), new Field(entry.getValue().getType()));
         }
         return clone;
     }

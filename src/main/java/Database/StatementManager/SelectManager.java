@@ -1,16 +1,17 @@
 package Database.StatementManager;
 
-import Database.Table.Record.LockableRecord;
+import Database.Table.Record.LockableIndex;
 import Database.Table.Record.Record;
 import Database.Table.RecordIterator;
+import Database.Table.SelectableTable;
 import Database.Table.Table;
 import SQL.Statement.SelectStatement;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 public class SelectManager implements StatementManager {
-    private Table table;
+    private SelectableTable table;
     private String field;
     private String condition;
     private String value;
@@ -36,33 +37,60 @@ public class SelectManager implements StatementManager {
     }
 
     public void selectAll(){
-
-        RecordIterator recordIterator = table.getRecordIterator();
-        Record record;
-        StringBuilder records = new StringBuilder();
-        while(recordIterator.hasNext()){
-            record = recordIterator.getNextRecord();
-            records.append(record.printRecord());
+        try{
+            table.getLock().readLock().lock();
+            RecordIterator recordIterator = table.getRecordIterator();
+            Record record;
+            StringBuilder output = new StringBuilder();
+            while(recordIterator.hasNext()){
+                record = recordIterator.getNextRecord();
+                output.append(record.printRecord());
+            }
+            printOutput(output.toString());
+        }finally{
+            table.getLock().readLock().unlock();
         }
-        if(out != null) out.println(records.toString());
+
+
     }
 
     private void selectUsingPrimaryKey(){
-        selectUsingPrimaryKey(value);
-    }
-
-    private void selectUsingPrimaryKey(String primaryKey){
-        LockableRecord recordLock= table.getRecordInfo(primaryKey);
+        LockableIndex recordLock= table.getRecordInfo(value);
         recordLock.readLock();
-        Record record = table.getRecord(primaryKey);
+        Record record = table.getRecord(value);
         recordLock.readUnlock();
-        out.println(record.printRecord());
+        printOutput(record.printRecord());
     }
 
     private void selectUsingCondition(){
-        ArrayList<String> matchingRecords = table.getRecordsWithCondition(field, condition, value);
-        for(String primaryKey : matchingRecords) {
-            selectUsingPrimaryKey(primaryKey);
+        try{
+            table.getLock().readLock().lock();
+        RecordIterator recordIterator = table.getRecordIterator();
+        StringBuilder output = new StringBuilder();
+
+        while (recordIterator.hasNext()) {
+            Record record = recordIterator.getNextRecord();
+            LockableIndex recordLock = table.getRecordInfo(record.getPrimaryKey());
+            try{
+                recordLock.readLock();
+                if (record.checkCondition(field, condition, value)) output.append(record.printRecord());
+            }finally{
+                recordLock.readUnlock();
+            }
+
+        }
+        printOutput(output.toString());
+        }finally {
+            table.getLock().readLock().unlock();
+        }
+    }
+
+    private void printOutput(String output){
+        if(out != null){
+            if(output.length() > 0){
+                out.println(output.toString());
+            }
+            else out.println("no values found\n");
         }
     }
 }

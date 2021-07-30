@@ -1,25 +1,33 @@
 package Database.StatementManager;
 
+import Database.Table.DeletableTable;
+import Database.Table.Record.LockableIndex;
 import Database.Table.Record.Record;
 import Database.Table.RecordIterator;
 import Database.Table.Table;
 import SQL.Statement.DeleteStatement;
-
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class DeleteManager implements StatementManager {
-    Table table;
+public class DeleteManager implements StatementManager{
+    DeletableTable table;
     String field;
     String condition;
     String value;
     PrintWriter out;
+    LinkedList<LockableIndex> records;
+    private LinkedList<LockableIndex> recordIndexList;
 
-    public DeleteManager(DeleteStatement delete, Table table) {
+    public DeleteManager(DeleteStatement delete, Table table){
         this.table = table;
         field = delete.getField();
         condition = delete.getCondition();
         value = delete.getValue();
         out = delete.getOutputStream();
+        records = new LinkedList<LockableIndex>();
+        recordIndexList = new LinkedList<LockableIndex>();
     }
 
     public void execute(){
@@ -30,17 +38,54 @@ public class DeleteManager implements StatementManager {
 
     private void deleteUsingPrimaryKey(){
         table.deleteRecord(value);
-        table.removeRecordIndex(value);
     }
 
     private void deleteUsingCondition(){
-        RecordIterator recordIterator = table.getRecordIterator();
-        Record record;
-        while(recordIterator.hasNext()){
-            record = recordIterator.getNextRecord();
-            if(record.checkCondition(field, condition, value)){
+        try{
+            acquireLocks();
+            deleteLockedRecords();
+        }finally {
+            releaseLocks();
+        }
+    }
+
+    private void deleteLockedRecords(){
+        try {
+            table.getLock().writeLock().lock();
+
+            for (LockableIndex lockableIndex : recordIndexList) {
+                Record record = table.getRecord(lockableIndex.getPrimaryKey());
                 table.deleteRecord(record.getPrimaryKey());
-                recordIterator.deleteRecord();
+            }
+        }finally {
+            table.getLock().writeLock().unlock();
+        }
+    }
+    private void releaseLocks(){
+        while(!recordIndexList.isEmpty()){
+            LockableIndex lockableIndex = recordIndexList.pop();
+            lockableIndex.writeUnlock();
+        }
+    }
+
+    private void acquireLocks(){
+        RecordIterator recordIterator = table.getRecordIterator();
+
+        while (recordIterator.hasNext()) {
+            Record record = recordIterator.getNextRecord();
+            if(record.checkCondition(field, condition, value)){
+                LockableIndex index = table.getRecordInfo(record.getPrimaryKey());
+                ReentrantReadWriteLock.WriteLock lock = index.getLock().writeLock();
+                try{
+                    if(lock.tryLock(120, TimeUnit.SECONDS)){
+                        recordIndexList.add(index);
+                    }else{
+                        releaseLocks();
+                        deleteUsingCondition();
+                    }
+                }catch (InterruptedException e) {
+                    System.out.println(e);
+                }
             }
         }
     }

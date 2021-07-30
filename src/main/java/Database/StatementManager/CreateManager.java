@@ -6,6 +6,7 @@ import SQL.Statement.CreateStatement;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 public class CreateManager implements StatementManager {
@@ -13,11 +14,13 @@ public class CreateManager implements StatementManager {
     String tableName;
     String primaryKey;
     String metaData;
+    PrintWriter out;
 
     public CreateManager(CreateStatement create, Table table) {
         tableName = create.getTableName();
         primaryKey = create.getPrimaryKey();
         metaData = create.getMetaDataInString();
+        out = create.getOutputStream();
     }
 
     public void execute(){
@@ -32,6 +35,7 @@ public class CreateManager implements StatementManager {
         }catch (IOException e){
             System.out.println(e);
         }
+        if(out != null) out.println("Transaction Successful\n");
     }
 
     public void createTableSrc() throws IOException{

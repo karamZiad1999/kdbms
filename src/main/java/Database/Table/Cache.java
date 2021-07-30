@@ -11,19 +11,16 @@ public class Cache {
     private LinkedHashMap<String, Record> records;
     private final long MAX = 10000;
 
-    Cache(){
-
-        records = new LinkedHashMap<String, Record>() {
+    Cache(){ records = new LinkedHashMap<String, Record>() {
             protected boolean removeEldestEntry(Map.Entry<String, Record> eldest)
             {
                 return size() > MAX;
             }
-        };
-    }
+        }; }
 
-    public void addRecord(Record record, byte[] block){
-         record.addRecord(block);
-         records.put( record.getPrimaryKey(), record);
+    public void addRecord(Record emptyRecord, String block){
+         emptyRecord.addRecord(block);
+         records.put(emptyRecord.getPrimaryKey(), emptyRecord);
     }
 
     public Record getRecord(String primaryKey){

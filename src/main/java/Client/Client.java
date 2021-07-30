@@ -23,32 +23,30 @@ public class Client {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             sc = new Scanner(System.in);
-
             sc.useDelimiter(";");
             String input = "";
-
-        while(true){
-            input = sc.next();
-            input = input.trim().replace("\n", " ");
-            out.println(input);
-            StringBuilder finalString = new StringBuilder();
-
-            if(input.equalsIgnoreCase("esc")) break;
-
-             String output = "";
+            System.out.println("Please enter id: ");
 
             while(true){
-                finalString.append(output);
-                finalString.append("\n");
-                output = in.readLine();
-                if(output.length() == 0){
-                    break;
+                input = sc.next();
+                input = input.trim().replace("\n", " ");
+                out.println(input);
+                StringBuilder finalString = new StringBuilder();
+
+                if(input.equalsIgnoreCase("esc")) break;
+
+                 String output = "";
+
+                while(true){
+                    finalString.append(output);
+                    finalString.append("\n");
+                    output = in.readLine();
+                    if(output.length() == 0){
+                        break;
+                    }
                 }
+                System.out.println(finalString.toString());
             }
-            System.out.println(finalString.toString());
-
-        }
-
         }catch (Exception e) {
             System.out.println(e);
         }finally{
