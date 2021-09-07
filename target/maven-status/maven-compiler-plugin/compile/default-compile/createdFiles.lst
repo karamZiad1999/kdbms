@@ -4,7 +4,6 @@ Database\Table\Record\Field\ConditionChecker\ConditionCheckerFactory.class
 Database\Table\Cache$1.class
 SQL\Statement\InsertStatement.class
 Database\Table\DeletableTable.class
-Client\Client.class
 Database\Table\Record\Field\ConditionChecker\ConditionChecker.class
 SQL\QueryHandler.class
 Database\Table\Record\Record.class
@@ -28,7 +27,6 @@ Database\Table\Record\Field\Field.class
 Database\StatementManager\SelectManager.class
 Database\Table\Record\Field\ConditionChecker\FloatConditionChecker.class
 Database\Table\Record\Field\ConditionChecker\IntegerConditionChecker.class
-Database\Table\Record\RecordTemplate.class
 Database\Table\UpdatableTable.class
 SQL\Statement\Create.class
 Database\StatementManager\UpdateManager.class
@@ -39,10 +37,9 @@ SQL\Statement\StatementKeywords.class
 SQL\Statement\Insert.class
 Database\Table\Record\Field\ConditionChecker\LongConditionChecker.class
 SQL\QueryLog.class
-SQL\Authorization.class
-SQL\AuthorizationHandler.class
 SQL\Statement\StatementFactory.class
 Database\Table\Record\Field\ConditionChecker\DoubleConditionChecker.class
+Database\Table\Record\RecordFactory.class
 SQL\Statement\SelectStatement.class
 Database\StatementManager\StatementManagerFactory.class
 SQL\Statement\Statement.class
