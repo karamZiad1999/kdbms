@@ -8,13 +8,13 @@ public class QueryHandler {
     KDBMS database;
     PrintWriter out;
     QueryLog queryLog;
-    Authorization authorization;
 
-    public QueryHandler(PrintWriter out, Authorization authorization){
+
+    public QueryHandler(PrintWriter out){
         database = KDBMS.getInstance();
         this.out = out;
         queryLog = QueryLog.getInstance();
-        this.authorization = authorization;
+
     }
 
     public void handleQuery(String query){
@@ -22,7 +22,7 @@ public class QueryHandler {
         statement.setOutputStream(out);
         try{
             queryLog.logQuery(this.toString(), query);
-            database.execute(statement, authorization);
+            database.execute(statement);
         }finally {
             queryLog.markQueryExecuted(this.toString(), query);
         }

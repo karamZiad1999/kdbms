@@ -1,8 +1,6 @@
 package Server;
 
 
-import SQL.Authorization;
-import SQL.AuthorizationHandler;
 import SQL.QueryHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,17 +21,9 @@ public class ServerThread extends Thread{
         try{
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            Authorization authorization = getAuthorization(out, in);
-            queryHandler = new QueryHandler(out, authorization);
-            if(authorization.equals(Authorization.DENIED)){
-                out.println("Connection terminated\n");
-                return;
-            }
-            while(true){
-                String query = in.readLine();
-                if(query.equalsIgnoreCase("esc")) break;
-                queryHandler.handleQuery(query);
-            }
+            queryHandler = new QueryHandler(out);
+            String query = in.readLine();
+            queryHandler.handleQuery(query);
         }catch(
                 IOException e){
             System.out.println(e);}
@@ -46,15 +36,6 @@ public class ServerThread extends Thread{
                 System.out.println(e);
             }
         }
-    }
-
-    public Authorization getAuthorization(PrintWriter out, BufferedReader in) throws IOException {
-
-        String id = in.readLine();
-        AuthorizationHandler authorizationHandler = AuthorizationHandler.getInstance();
-        Authorization authorization = authorizationHandler.getAuthorization(id);
-        out.println("Authorization: " + authorization + "\n");
-        return authorization;
     }
 }
 

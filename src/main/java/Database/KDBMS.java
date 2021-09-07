@@ -5,8 +5,6 @@ import java.util.*;
 import Database.StatementManager.StatementManager;
 import Database.StatementManager.StatementManagerFactory;
 import Database.Table.Table;
-import SQL.Authorization;
-import SQL.QueryLog;
 import SQL.Statement.Statement;
 
 
@@ -39,15 +37,11 @@ public class KDBMS {
         }
     }
 
-    public void execute(Statement statement, Authorization authorization){
+    public void execute(Statement statement){
         Table table = fetchTable(statement.getTableName());
-        StatementManager statementManager = StatementManagerFactory.makeStatementManager(statement, table, authorization);
+        StatementManager statementManager = StatementManagerFactory.makeStatementManager(statement, table);
 
         statementManager.execute();
-    }
-
-    public void execute(Statement statement){
-        execute(statement, Authorization.DATABASE_MAINTAINER);
     }
 
     public Table fetchTable(String tableName){

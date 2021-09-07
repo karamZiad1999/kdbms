@@ -9,8 +9,5 @@
         <module name="atypon-database-project" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="atypon-database-project" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
