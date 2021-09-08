@@ -20,7 +20,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>DatabaseServer</mainClass>
+                            <mainClass>com.atypon.server.DatabaseServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

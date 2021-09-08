@@ -1,1 +1,1 @@
-"# atypon-database-project" 
+"# atypon-com.atypon.database-project" 

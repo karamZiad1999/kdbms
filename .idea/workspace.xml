@@ -32,11 +32,11 @@
   </component>
   <component name="RunManager" selected="Application.DatabaseServer">
     <configuration name="DatabaseServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="server.DatabaseServer" />
+      <option name="MAIN_CLASS_NAME" value="com.atypon.server.DatabaseServer" />
       <module name="kdbms" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="server.*" />
+          <option name="PATTERN" value="com.atypon.server.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -70,7 +70,7 @@
       <workItem from="1631028348588" duration="135000" />
       <workItem from="1631028499866" duration="2740000" />
       <workItem from="1631100487773" duration="1183000" />
-      <workItem from="1631103072323" duration="2958000" />
+      <workItem from="1631103072323" duration="3330000" />
     </task>
     <servers />
   </component>
