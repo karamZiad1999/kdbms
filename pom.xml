@@ -26,6 +26,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>kdbms</finalName>
     </build>
 
 
