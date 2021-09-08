@@ -1,3 +1,4 @@
 FROM openjdk:8
-
-CMD ["java", "-jar", "/kdbms-1.0.jar"]
+ADD target/kdbms.jar kdbms.jar
+ENTRYPOINT ["java", "-jar", "kdbms.jar"]
+EXPOSE 2000
