@@ -1,6 +1,6 @@
 package SQL;
 
-import Database.KDBMS;
+import database.KDBMS;
 import SQL.Statement.Statement;
 import SQL.Statement.StatementFactory;
 

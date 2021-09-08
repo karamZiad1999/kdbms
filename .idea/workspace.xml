@@ -6,6 +6,44 @@
   <component name="ChangeListManager">
     <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/KDBMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/KDBMS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/CreateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/CreateManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/DeleteManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/DeleteManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/InsertManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/InsertManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/SelectManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/SelectManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/StatementManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/StatementManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/StatementManagerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/StatementManagerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/StatementManager/UpdateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/statementmanager/UpdateManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Cache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Cache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/DeletableTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/DeletableTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/IndexManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/IndexManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/InsertableTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/InsertableTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/ConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/ConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/ConditionCheckerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/ConditionCheckerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/DoubleConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/DoubleConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/FloatConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/FloatConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/IntegerConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/IntegerConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/LongConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/LongConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/ConditionChecker/StringConditionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/ConditionChecker/StringConditionChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Field/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Field/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/LockableIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/LockableIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/RecordFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/RecordFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Record/RecordInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Record/RecordInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/RecordIterator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/RecordIterator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/SelectableTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/SelectableTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/TableManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/TableManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/TableSrcManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/TableSrcManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/Table/UpdatableTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/database/table/UpdatableTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SQL/QueryHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SQL/QueryHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SQL/QueryLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SQL/QueryLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SQL/Statement/InsertStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SQL/Statement/InsertStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/DatabaseServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/DatabaseServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/server/ServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Server/DatabaseServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Server/DatabaseServer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,20 +62,21 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../kdbms_web" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\karam\Desktop\kdbms\" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.src/Dockerfile">
+  <component name="RunManager" selected="Application.DatabaseServer">
     <configuration name="DatabaseServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Server.DatabaseServer" />
+      <option name="MAIN_CLASS_NAME" value="server.DatabaseServer" />
       <module name="kdbms" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Server.*" />
+          <option name="PATTERN" value="server.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -55,8 +94,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.src/Dockerfile" />
         <item itemvalue="Application.DatabaseServer" />
+        <item itemvalue="Docker.src/Dockerfile" />
       </list>
     </recent_temporary>
   </component>
@@ -71,6 +110,7 @@
       <workItem from="1631028348588" duration="135000" />
       <workItem from="1631028499866" duration="2740000" />
       <workItem from="1631100487773" duration="1183000" />
+      <workItem from="1631103072323" duration="2315000" />
     </task>
     <servers />
   </component>

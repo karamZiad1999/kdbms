@@ -1,5 +1,5 @@
 package SQL;
-import Database.KDBMS;
+import database.KDBMS;
 
 import java.io.PrintWriter;
 import SQL.Statement.*;
