@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/target/kdbms.jar" beforeDir="false" />
-    </list>
+    <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,7 +70,7 @@
       <workItem from="1631028348588" duration="135000" />
       <workItem from="1631028499866" duration="2740000" />
       <workItem from="1631100487773" duration="1183000" />
-      <workItem from="1631103072323" duration="2655000" />
+      <workItem from="1631103072323" duration="2958000" />
     </task>
     <servers />
   </component>

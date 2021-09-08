@@ -20,7 +20,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>server.DatabaseServer</mainClass>
+                            <mainClass>DatabaseServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
