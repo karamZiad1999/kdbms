@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Table implements InsertableTable, SelectableTable, UpdatableTable, DeletableTable {
+public final class Table implements InsertableTable, SelectableTable, UpdatableTable, DeletableTable {
 
     private Cache cache;
     private RecordFactory recordFactory;
@@ -17,11 +17,6 @@ public class Table implements InsertableTable, SelectableTable, UpdatableTable, 
     private ReentrantReadWriteLock lock;
 
     public Table(String tableName){
-        makeInstances(tableName);
-
-    }
-
-    private void makeInstances(String tableName){
         tableManager = new TableManager(tableName);
         recordFactory = new RecordFactory(tableName);
         cache = new Cache();
@@ -92,4 +87,5 @@ public class Table implements InsertableTable, SelectableTable, UpdatableTable, 
     public ReentrantReadWriteLock getLock(){
         return lock;
     }
+
 }

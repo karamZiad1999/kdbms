@@ -67,19 +67,15 @@ public class RecordInfo implements LockableIndex {
         return indexRecord.toString();
     }
 
-    public void readLock(){
-        lock.readLock().lock();
-    }
+    public void readLock(){if(lock!= null) lock.readLock().lock();}
 
-    public void readUnlock(){lock.readLock().unlock();}
+    public void readUnlock(){if(lock!= null)lock.readLock().unlock();}
 
-    public void writeLock(){lock.writeLock().lock();}
+    public void writeLock(){if(lock!= null)lock.writeLock().lock();}
 
-    public void writeUnlock(){lock.writeLock().unlock();}
+    public void writeUnlock(){if(lock!= null)lock.writeLock().unlock();}
 
-    public ReentrantReadWriteLock getLock(){
-        return lock;
-    }
+    public ReentrantReadWriteLock getLock(){return lock;}
 
     public String getPrimaryKey(){
         return primaryKey;

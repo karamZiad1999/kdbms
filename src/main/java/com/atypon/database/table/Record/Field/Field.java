@@ -9,7 +9,6 @@ public class Field {
     private String type;
     private ConditionChecker conditionChecker;
 
-
     public Field(String type){
         this.type = type;
         conditionChecker = new ConditionCheckerFactory().getInstance(type);
@@ -20,9 +19,12 @@ public class Field {
         this.value = value;
     }
 
+    public void setType(String type){this.type = type;}
+
     public String getValue(){return value;}
 
     public String getType(){return type;}
+
 
     public boolean checkCondition(String condition, String comparedValue){
 

@@ -8,6 +8,7 @@ import com.atypon.database.table.Table;
 import com.atypon.SQL.Statement.SelectStatement;
 
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class SelectManager implements StatementManager {
     private SelectableTable table;
@@ -41,16 +42,28 @@ public class SelectManager implements StatementManager {
             RecordIterator recordIterator = table.getRecordIterator();
             Record record;
             StringBuilder output = new StringBuilder();
+
+            if(recordIterator.hasNext())
+            {
+                record = recordIterator.getNextRecord();
+                output.append(record.getHeader());
+                output.append(record.printRecord());
+            }
+
             while(recordIterator.hasNext()){
                 record = recordIterator.getNextRecord();
-                output.append(record.printRecord());
+                LockableIndex recordLock = table.getRecordInfo(record.getPrimaryKey());
+                try{
+                    recordLock.readLock();
+                    output.append(record.printRecord());
+                }finally{
+                    recordLock.readUnlock();
+                }
             }
             printOutput(output.toString());
         }finally{
             table.getLock().readLock().unlock();
         }
-
-
     }
 
     private void selectUsingPrimaryKey(){
@@ -87,7 +100,7 @@ public class SelectManager implements StatementManager {
     private void printOutput(String output){
         if(out != null){
             if(output.length() > 0){
-                out.println(output.toString());
+                out.println(output);
             }
             else out.println("no values found\n");
         }

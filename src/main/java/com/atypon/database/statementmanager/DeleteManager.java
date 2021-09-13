@@ -37,7 +37,14 @@ public class DeleteManager implements StatementManager{
     }
 
     private void deleteUsingPrimaryKey(){
-        table.deleteRecord(value);
+        LockableIndex index = table.getRecordInfo(value);
+        try{
+            index.writeLock();
+            table.deleteRecord(value);
+
+        }finally {
+            index.writeUnlock();
+        }
     }
 
     private void deleteUsingCondition(){

@@ -28,7 +28,7 @@ public class Record{
 
         int i = 0;
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
-                entry.getValue().setValue(recordSegments[i++]);
+            entry.getValue().setValue(recordSegments[i++]);
         }
     }
 
@@ -55,14 +55,28 @@ public class Record{
     public String printRecord(){
         StringBuilder record = new StringBuilder();
         for(Map.Entry<String, Field> entry : fields.entrySet() ){
-            record.append(entry.getKey());
-            record.append(" : ");
+            record.append(",");
             record.append(entry.getValue().getValue());
-            record.append(" |");
         }
         record.append("\n");
+        record.deleteCharAt(0);
         return record.toString();
     }
 
+    public String getHeader(){
+        StringBuilder header = new StringBuilder();
+        for(Map.Entry<String, Field> entry : fields.entrySet() ){
+            header.append(",");
+            header.append(entry.getKey());
+        }
+        header.append("\n");
+        header.deleteCharAt(0);
+        return header.toString();
+    }
+
+    @Override
+    public String toString(){
+       return printRecord();
+    }
 
 }

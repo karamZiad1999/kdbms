@@ -38,11 +38,18 @@ public class UpdateManager implements StatementManager {
     }
 
     private void updateUsingPrimaryKey(){
+        LockableIndex index = table.getRecordInfo(value);
         Record record = table.getRecord(value);
-        if(record != null) {
-            record.updateRecord(updates);
-            table.updateRecord(value, record.getRecordBlock());
+        try{
+            index.writeLock();
+            if(record != null) {
+                record.updateRecord(updates);
+                table.updateRecord(value, record.getRecordBlock());
+            }
+        }finally {
+            index.writeUnlock();
         }
+
     }
 
     private void updateUsingCondition(){

@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="" />
+    <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qeuryLog.kdb" beforeDir="false" afterPath="$PROJECT_DIR$/qeuryLog.kdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/KDBMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/KDBMS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/DeleteManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/DeleteManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/SelectManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/SelectManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/UpdateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/UpdateManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Field/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Field/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/RecordInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/RecordInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Table.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,12 +33,15 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../kdbms_web" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\karam\Desktop\kdbms\" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.atypon" />
     </key>
   </component>
   <component name="RunManager" selected="Application.DatabaseServer">
@@ -70,7 +84,10 @@
       <workItem from="1631028348588" duration="135000" />
       <workItem from="1631028499866" duration="2740000" />
       <workItem from="1631100487773" duration="1183000" />
-      <workItem from="1631103072323" duration="3330000" />
+      <workItem from="1631103072323" duration="3721000" />
+      <workItem from="1631117995396" duration="5155000" />
+      <workItem from="1631187514291" duration="1850000" />
+      <workItem from="1631191850857" duration="26080000" />
     </task>
     <servers />
   </component>
