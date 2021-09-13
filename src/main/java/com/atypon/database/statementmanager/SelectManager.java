@@ -60,6 +60,7 @@ public class SelectManager implements StatementManager {
                     recordLock.readUnlock();
                 }
             }
+            output.append("end");
             printOutput(output.toString());
         }finally{
             table.getLock().readLock().unlock();

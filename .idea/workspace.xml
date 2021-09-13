@@ -6,15 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="9362b770-35c4-4602-b706-eb8cadd1efd8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/karam-index.kdb" beforeDir="false" afterPath="$PROJECT_DIR$/karam-index.kdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/karam.kdb" beforeDir="false" afterPath="$PROJECT_DIR$/karam.kdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qeuryLog.kdb" beforeDir="false" afterPath="$PROJECT_DIR$/qeuryLog.kdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/KDBMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/KDBMS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/DeleteManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/DeleteManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/CreateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/CreateManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/SelectManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/SelectManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/UpdateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/UpdateManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Field/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Field/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/Record.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/RecordInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Record/RecordInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/table/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/StatementManagerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atypon/database/statementmanager/StatementManagerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tableSet.kdb" beforeDir="false" afterPath="$PROJECT_DIR$/tableSet.kdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/atypon/database/KDBMS.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/atypon/database/KDBMS.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/CreateManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/CreateManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/SelectManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/SelectManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/StatementManagerFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/atypon/database/statementmanager/StatementManagerFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/atypon/database/table/Record/Field/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/atypon/database/table/Record/Field/Field.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +37,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../kdbms_web" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
@@ -44,7 +48,20 @@
       <recent name="com.atypon" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DatabaseServer">
+  <component name="RunManager" selected="Application.Client">
+    <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.atypon.client.Client" />
+      <module name="kdbms" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.atypon.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DatabaseServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.atypon.server.DatabaseServer" />
       <module name="kdbms" />
@@ -68,6 +85,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Client" />
         <item itemvalue="Application.DatabaseServer" />
         <item itemvalue="Docker.src/Dockerfile" />
       </list>
@@ -88,6 +106,7 @@
       <workItem from="1631117995396" duration="5155000" />
       <workItem from="1631187514291" duration="1850000" />
       <workItem from="1631191850857" duration="26080000" />
+      <workItem from="1631563314413" duration="1314000" />
     </task>
     <servers />
   </component>

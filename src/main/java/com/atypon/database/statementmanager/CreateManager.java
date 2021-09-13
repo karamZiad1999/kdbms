@@ -3,6 +3,8 @@ package com.atypon.database.statementmanager;
 import com.atypon.database.KDBMS;
 import com.atypon.database.table.Table;
 import com.atypon.SQL.Statement.CreateStatement;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +26,7 @@ public class CreateManager implements StatementManager {
     }
 
     public void execute(){
+        System.out.println("executing print table");
         KDBMS database = KDBMS.getInstance();
         database.addTable(tableName);
 
@@ -35,10 +38,11 @@ public class CreateManager implements StatementManager {
         }catch (IOException e){
             System.out.println(e);
         }
-        if(out != null) out.println("Transaction Successful\n");
+        if(out != null) out.println("Transaction Successful\nend");
     }
 
     public void createTableSrc() throws IOException{
+        System.out.println("creating table src");
         File tableSrc = new File(tableName + ".kdb");
         tableSrc.createNewFile();
     }

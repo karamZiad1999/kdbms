@@ -39,9 +39,8 @@ public class KDBMS {
 
     public void execute(Statement statement){
         Table table = fetchTable(statement.getTableName());
-        if(table == null) return;
         StatementManager statementManager = StatementManagerFactory.makeStatementManager(statement, table);
-        statementManager.execute();
+        if(statementManager != null ) statementManager.execute();
     }
 
     public Table fetchTable(String tableName){

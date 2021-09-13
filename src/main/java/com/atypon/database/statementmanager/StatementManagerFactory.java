@@ -9,6 +9,9 @@ public class StatementManagerFactory {
         if(statement instanceof Create){
             statementManager = new CreateManager((Create) statement, table);
         }
+        else if(table == null){
+            return null;
+        }
         else if (statement instanceof Insert){
             statementManager =  new InsertManager((Insert) statement, table);
         }
