@@ -1,7 +1,7 @@
 package com.atypon.server;
 
 
-import com.atypon.SQL.QueryHandler;
+import com.atypon.sql.QueryHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,17 +23,17 @@ public class ServerThread extends Thread{
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             queryHandler = new QueryHandler(out);
             String query = in.readLine();
+            if(query==null) return;
             queryHandler.handleQuery(query);
-        }catch(
-                IOException e){
-            System.out.println(e);}
-        finally{
+        }catch(IOException e) {
+            e.printStackTrace();
+        }finally{
             try{
                 if(socket != null) socket.close();
                 if(out != null) out.close();
                 if(in != null) in.close();
             }catch(Exception e){
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }

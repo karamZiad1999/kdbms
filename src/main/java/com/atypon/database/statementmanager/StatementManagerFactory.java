@@ -1,28 +1,28 @@
 package com.atypon.database.statementmanager;
 
-import com.atypon.database.table.Table;
-import com.atypon.SQL.Statement.*;
+import com.atypon.database.Schema;
+import com.atypon.sql.statement.*;
 
 public class StatementManagerFactory {
-    public static StatementManager makeStatementManager(Statement statement, Table table){
+    public static StatementManager makeStatementManager(Statement statement, Schema schema){
         StatementManager statementManager = null;
         if(statement instanceof Create){
-            statementManager = new CreateManager((Create) statement, table);
+            statementManager = new CreateManager((Create) statement);
         }
-        else if(table == null){
+        else if(schema == null){
             return null;
         }
         else if (statement instanceof Insert){
-            statementManager =  new InsertManager((Insert) statement, table);
+            statementManager =  new InsertManager((Insert) statement, schema);
         }
         else if (statement instanceof Select){
-           statementManager =  new SelectManager((Select) statement, table);
+           statementManager =  new SelectManager((Select) statement, schema);
         }
         else if (statement instanceof Update){
-            statementManager =  new UpdateManager((Update) statement, table);
+            statementManager =  new UpdateManager((Update) statement, schema);
         }
         else if (statement instanceof Delete){
-            statementManager =  new DeleteManager((Delete) statement, table);
+            statementManager =  new DeleteManager((Delete) statement, schema);
         }
         return statementManager;
     }

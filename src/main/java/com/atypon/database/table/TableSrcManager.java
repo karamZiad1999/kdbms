@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 public class TableSrcManager {
     File tableSrc;
 
-    public TableSrcManager(String tableName){
-        tableSrc = new File(tableName+ ".kdb");
+    public TableSrcManager(String schemaName, String tableName){
+        tableSrc = new File(schemaName + "/" +tableName+ ".kdb");
     }
 
     public String getBlock(long byteOffset, int blockSize){

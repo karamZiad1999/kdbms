@@ -2,22 +2,22 @@ package com.atypon.database;
 
 import java.io.*;
 import java.util.*;
+
 import com.atypon.database.statementmanager.StatementManager;
 import com.atypon.database.statementmanager.StatementManagerFactory;
-import com.atypon.database.table.Table;
-import com.atypon.SQL.Statement.Statement;
+import com.atypon.sql.statement.Statement;
 
 
 public class KDBMS {
 
     private static KDBMS database;
-    private HashMap<String, Table> tables;
-    private Set<String> tableSet;
+    private HashMap<String, Schema> schemas;
+    private Set<String> schemaSet;
 
     private KDBMS(){
-        tables = new HashMap<String, Table>();
-        tableSet = new HashSet<String>();
-        initializeTableSet();
+        schemas = new HashMap<String, Schema>();
+        schemaSet = new HashSet<String>();
+        initializeSchemaSet();
 
     }
 
@@ -26,37 +26,36 @@ public class KDBMS {
         return database;
     }
 
-    public void addTable(String tableName){
-        tableSet.add(tableName);
-        tables.put(tableName, new Table(tableName));
+    public void addSchema(String schemaName){
+        schemaSet.add(schemaName);
 
-        try(FileWriter tableSetWriter = new FileWriter("tableSet.kdb", true)){
-            tableSetWriter.write(tableName + "\n");
+        try(FileWriter schemaSetWriter = new FileWriter("schemaSet.kdb", true)){
+            schemaSetWriter.write(schemaName + "\n");
         }catch(IOException e){
             System.out.println(e);
         }
     }
 
     public void execute(Statement statement){
-        Table table = fetchTable(statement.getTableName());
-        StatementManager statementManager = StatementManagerFactory.makeStatementManager(statement, table);
-        if(statementManager != null ) statementManager.execute();
+        Schema schema = fetchSchema(statement.getSchemaName());
+        StatementManager statementManager = StatementManagerFactory.makeStatementManager(statement, schema);
+        if(statementManager!=null) statementManager.execute();
     }
 
-    public Table fetchTable(String tableName){
-        if(tableSet.contains(tableName) && tables.get(tableName) == null) tables.put(tableName, new Table(tableName));
-        return tables.get(tableName);
+    public Schema fetchSchema(String schemaName){
+        if(schemaSet.contains(schemaName) && schemas.get(schemaName)==null) schemas.put(schemaName, new Schema(schemaName));
+        return schemas.get(schemaName);
     }
 
-    public void initializeTableSet(){
-        try(RandomAccessFile tableSetSrc = new RandomAccessFile("tableSet.kdb", "rw");){
-            String tableName;
-            while((tableName = tableSetSrc.readLine()) != null) tableSet.add(tableName);
+    public void initializeSchemaSet(){
+        try(RandomAccessFile schemaSetSrc = new RandomAccessFile("schemaSet.kdb", "rw");){
+            String schemaName;
+            while((schemaName = schemaSetSrc.readLine()) != null) schemaSet.add(schemaName);
         }catch(IOException e){
             System.out.println(e);
         }
     }
-    public boolean isTableNameLegal(String tableName){
-        return (!tableSet.contains(tableName));
+    public boolean isSchemaNameLegal(String schemaName){
+        return (!schemaSet.contains(schemaName));
     }
 }

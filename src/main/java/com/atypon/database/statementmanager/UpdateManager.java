@@ -1,11 +1,12 @@
 package com.atypon.database.statementmanager;
 
+import com.atypon.database.Schema;
 import com.atypon.database.table.Record.LockableIndex;
 import com.atypon.database.table.Record.Record;
 import com.atypon.database.table.RecordIterator;
 import com.atypon.database.table.Table;
 import com.atypon.database.table.UpdatableTable;
-import com.atypon.SQL.Statement.UpdateStatement;
+import com.atypon.sql.statement.UpdateStatement;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,13 +21,15 @@ public class UpdateManager implements StatementManager {
     UpdatableTable table;
     PrintWriter out;
     LinkedList<LockableIndex> recordIndexList;
+    Schema schema;
 
-    public UpdateManager(UpdateStatement update, Table table){
+    public UpdateManager(UpdateStatement update, Schema schema){
+        this.schema = schema;
         field = update.getField();
         condition = update.getCondition();
         value = update.getValue();
         updates = update.getUpdates();
-        this.table = table;
+        this.table = schema.fetchTable(update.getTableName());
         out = update.getOutputStream();
         recordIndexList = new LinkedList<LockableIndex>();
     }
@@ -44,7 +47,7 @@ public class UpdateManager implements StatementManager {
             index.writeLock();
             if(record != null) {
                 record.updateRecord(updates);
-                table.updateRecord(value, record.getRecordBlock());
+                table.updateRecord(value, record.printEntry());
             }
         }finally {
             index.writeUnlock();
@@ -65,7 +68,7 @@ public class UpdateManager implements StatementManager {
         for(LockableIndex lockableIndex : recordIndexList){
             Record record = table.getRecord(lockableIndex.getPrimaryKey());
             record.updateRecord(updates);
-            table.updateRecord(record.getPrimaryKey(), record.getRecordBlock());
+            table.updateRecord(record.getPrimaryKey(), record.printEntry());
         }
 
     }

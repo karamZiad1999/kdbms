@@ -15,11 +15,11 @@ public class IndexManager {
     private HashMap<String, RecordInfo> deletedRecordsMap;
     private HashMap<String , RecordInfo> indexMap;
 
-    public IndexManager(String tableName){
+    public IndexManager(String schemaName, String tableName){
         try {
-            this.indexRecordSrc = new RandomAccessFile(tableName + "-index.kdb", "rw");
+            this.indexRecordSrc = new RandomAccessFile(schemaName + "/" + tableName + "-index.kdb", "rw");
         }catch(Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         indexMap = new HashMap<String, RecordInfo>();
         deletedRecordsMap = new HashMap<String , RecordInfo>();

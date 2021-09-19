@@ -1,33 +1,41 @@
 package com.atypon.database.statementmanager;
 
+import com.atypon.database.Schema;
 import com.atypon.database.table.InsertableTable;
+import com.atypon.database.table.Record.Record;
+import com.atypon.database.table.Record.RecordFactory;
 import com.atypon.database.table.Table;
-import com.atypon.SQL.Statement.InsertStatement;
+import com.atypon.sql.statement.InsertStatement;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 public class InsertManager implements StatementManager {
-    String record;
-    String primaryKey;
+    ArrayList<String> valueList;
+    Schema schema;
     InsertableTable table;
     PrintWriter out;
-
-    public InsertManager(InsertStatement insert, Table table) {
-        record = insert.getRecordBlock();
-        primaryKey = insert.getPrimaryKey();
-        this.table = table;
+    RecordFactory factory;
+    public InsertManager(InsertStatement insert, Schema schema) {
         out = insert.getOutputStream();
+        this.schema=schema;
+        this.table = schema.fetchTable(insert.getTableName());
+        this.valueList=insert.getValueList();
+        this.factory=table.getRecordFactory();
     }
+
     public void execute(){
         WriteLock lock = table.getLock().writeLock();
         try{
             lock.lock();
-            table.insertRecord(primaryKey, record);
+            Record record = factory.createRecord(valueList);
+            table.insertRecord(record);
         }finally{
             lock.unlock();
         }
 
         if(out != null) out.println("Transaction Successful\n");
     }
+
 }

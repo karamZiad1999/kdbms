@@ -1,5 +1,6 @@
 package com.atypon.database.table;
 
+import com.atypon.database.table.Record.Record;
 import com.atypon.database.table.Record.RecordInfo;
 import java.util.Iterator;
 
@@ -8,12 +9,13 @@ public class TableManager {
     IndexManager indexManager;
     TableSrcManager tableSrcManager;
 
-    public TableManager(String tableName){
-        tableSrcManager = new TableSrcManager(tableName);
-        indexManager = new IndexManager(tableName);
+    public TableManager(String schemaName, String tableName){
+        tableSrcManager = new TableSrcManager(schemaName , tableName);
+        indexManager = new IndexManager(schemaName, tableName);
     }
 
-    public void insertRecord(String primaryKey, String record){
+    public void insertRecord(String primaryKey,Record recordObject){
+        String record = recordObject.printEntry();
         long byteOffset = indexManager.getOverwriteRecord(record.length());
         byte [] b = record.getBytes();
         if(byteOffset == -1) byteOffset = tableSrcManager.printToFile(b);

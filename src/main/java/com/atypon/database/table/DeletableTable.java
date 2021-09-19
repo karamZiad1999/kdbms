@@ -9,7 +9,7 @@ public interface DeletableTable{
     public boolean isFieldPrimaryKey(String field);
     public void deleteRecord(String primaryKey);
     public Record getRecord(String primaryKey);
-    public LockableIndex getRecordInfo(String primaryKey);
+    public LockableIndex getLockableIndex(String primaryKey);
     public RecordIterator getRecordIterator();
     public ReentrantReadWriteLock getLock();
 }

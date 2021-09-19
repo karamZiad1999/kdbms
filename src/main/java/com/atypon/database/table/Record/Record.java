@@ -9,29 +9,23 @@ import java.util.Map;
 public class Record{
 
     private LinkedHashMap<String, Field> fields;
-    String primaryKey;
+    private String primaryKeyName;
 
-    public Record(LinkedHashMap<String, Field> fields, String primaryKey){
+    public Record(){}
+    public Record(LinkedHashMap<String, Field> fields){
         this.fields = fields;
-        this.primaryKey = primaryKey;
     }
 
     public Field getField(String name){return fields.get(name);}
 
 
+    public String getPrimaryKeyName() {
+        return primaryKeyName;
+    }
+    public void setPrimaryKeyName(String primaryKeyName){this.primaryKeyName=primaryKeyName;}
     public String getPrimaryKey(){
-        return primaryKey;
+        return getField(primaryKeyName).getValue();
     }
-
-    public void addRecord(String record) {
-       String [] recordSegments = record.split("\n");
-
-        int i = 0;
-        for (Map.Entry<String, Field> entry : fields.entrySet()) {
-            entry.getValue().setValue(recordSegments[i++]);
-        }
-    }
-
     public boolean checkCondition(String field, String condition, String value){
         return getField(field).checkCondition(condition, value);
     }
@@ -42,16 +36,6 @@ public class Record{
         }
     }
 
-    public String getRecordBlock(){
-        StringBuilder block = new StringBuilder();
-        for(Map.Entry<String,Field> entry : fields.entrySet()){
-            block.append(entry.getValue().getValue());
-            block.append("\n");
-        }
-        if (block.length() > 0 ) block.deleteCharAt(block.length() - 1);
-        return block.toString();
-    }
-
     public String printRecord(){
         StringBuilder record = new StringBuilder();
         for(Map.Entry<String, Field> entry : fields.entrySet() ){
@@ -59,6 +43,16 @@ public class Record{
             record.append(entry.getValue().getValue());
         }
         record.append("\n");
+        record.deleteCharAt(0);
+        return record.toString();
+    }
+
+    public String printEntry(){
+        StringBuilder record = new StringBuilder();
+        for(Map.Entry<String, Field> entry : fields.entrySet() ){
+            record.append(",");
+            record.append(entry.getValue().getEntry());
+        }
         record.deleteCharAt(0);
         return record.toString();
     }

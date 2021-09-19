@@ -15,32 +15,31 @@ public final class Table implements InsertableTable, SelectableTable, UpdatableT
     private RecordFactory recordFactory;
     private TableManager tableManager;
     private ReentrantReadWriteLock lock;
+    private String primaryKey;
 
-    public Table(String tableName){
-        tableManager = new TableManager(tableName);
-        recordFactory = new RecordFactory(tableName);
-        cache = new Cache();
+    public Table(String schemaName, String tableName){
+        tableManager = new TableManager(schemaName, tableName);
+        recordFactory = new RecordFactory(schemaName, tableName);
+        primaryKey = recordFactory.getPrimaryKey();
+        cache = new Cache(tableManager, recordFactory);
         lock = new ReentrantReadWriteLock();
     }
 
     public Record getRecord(String primaryKey){
         Record record = cache.getRecord(primaryKey);
-        if(record == null){
-            cacheRecord(primaryKey);
-            record = cache.getRecord(primaryKey);
-        }
         return record;
     }
 
-    public void cacheRecord(String primaryKey){
-        RecordInfo recordInfo = tableManager.getRecordInfo(primaryKey);
-        if(recordInfo == null) return;
-        cache.addRecord(new Record(recordFactory.copyHashMapTemplate(), primaryKey), tableManager.getBlock(primaryKey));
+    public void insertRecord (Record record){
+        String primaryKey = record.getPrimaryKey();
+        if(tableManager.getRecordInfo(primaryKey)!=null) return;
+        tableManager.insertRecord(primaryKey, record);
+        cache.addRecord(record);
     }
 
-    public void insertRecord (String primaryKey, String recordData){
-        tableManager.insertRecord(primaryKey, recordData);
-        cache.addRecord(new Record(recordFactory.copyHashMapTemplate(), primaryKey), recordData);
+    @Override
+    public RecordFactory getRecordFactory() {
+        return recordFactory;
     }
 
     public void updateRecord(String primaryKey, String recordBlock){
@@ -48,7 +47,7 @@ public final class Table implements InsertableTable, SelectableTable, UpdatableT
     }
 
     public boolean isFieldPrimaryKey(String fieldName){
-        return fieldName.equalsIgnoreCase(recordFactory.getPrimaryKey());
+        return fieldName.equalsIgnoreCase(primaryKey);
     }
 
     public void deleteRecord(String primaryKey){
@@ -65,7 +64,6 @@ public final class Table implements InsertableTable, SelectableTable, UpdatableT
         public Record getNextRecord(){
             Map.Entry entry = (Map.Entry)iterator.next();
             String primaryKey = (String) entry.getKey();
-            cacheRecord(primaryKey);
             return cache.getRecord(primaryKey);
         }
         public boolean hasNext(){
@@ -80,12 +78,20 @@ public final class Table implements InsertableTable, SelectableTable, UpdatableT
         return new TableRecordIterator();
     }
 
-    public LockableIndex getRecordInfo(String primaryKey){
+    public LockableIndex getLockableIndex(String primaryKey){
         return tableManager.getRecordInfo(primaryKey);
     }
 
     public ReentrantReadWriteLock getLock(){
         return lock;
+    }
+
+    public String getPrimaryKey(){
+        return primaryKey;
+    }
+
+    public String getMeta(){
+        return recordFactory.getMeta();
     }
 
 }

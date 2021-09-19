@@ -10,6 +10,6 @@ public interface UpdatableTable {
     public boolean isFieldPrimaryKey(String primaryKey);
     public void updateRecord(String primaryKey,String record);
     public RecordIterator getRecordIterator();
-    public LockableIndex getRecordInfo(String primaryKey);
+    public LockableIndex getLockableIndex(String primaryKey);
     public ReentrantReadWriteLock getLock();
 }

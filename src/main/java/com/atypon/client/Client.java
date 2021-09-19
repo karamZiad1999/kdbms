@@ -26,14 +26,13 @@ public class Client {
                 String input = "";
 
                 input = sc.next();
-                input = input.trim().replace("\n", " ");
+                input = input.trim().replaceAll("\\s+", " ");
                 if(input.equals("esc")) break;
                 out.println(input);
 
                 String output = " ";
 
                 if(in.hasNext()) output = in.next();
-
 
                 System.out.println(output);
             }
@@ -43,10 +42,10 @@ public class Client {
             try {
                 if (socket != null) socket.close();
                 if (out != null) out.close();
-//                if (in != null) in.close();
-//                if (sc != null) sc.close();
+                if (in != null) in.close();
+                if (sc != null) sc.close();
             }catch (Exception e){
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }

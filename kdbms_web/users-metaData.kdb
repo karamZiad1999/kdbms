@@ -1,0 +1,3 @@
+username:string:primary
+password:string
+role:relation:roles:role

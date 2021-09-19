@@ -1,17 +1,20 @@
 package com.atypon.database.statementmanager;
 
+import com.atypon.database.Schema;
 import com.atypon.database.table.DeletableTable;
 import com.atypon.database.table.Record.LockableIndex;
 import com.atypon.database.table.Record.Record;
 import com.atypon.database.table.RecordIterator;
 import com.atypon.database.table.Table;
-import com.atypon.SQL.Statement.DeleteStatement;
+import com.atypon.sql.statement.DeleteStatement;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DeleteManager implements StatementManager{
+
+    Schema schema;
     DeletableTable table;
     String field;
     String condition;
@@ -20,8 +23,9 @@ public class DeleteManager implements StatementManager{
     LinkedList<LockableIndex> records;
     private LinkedList<LockableIndex> recordIndexList;
 
-    public DeleteManager(DeleteStatement delete, Table table){
-        this.table = table;
+    public DeleteManager(DeleteStatement delete, Schema schema){
+        this.schema=schema;
+        this.table = schema.fetchTable(delete.getTableName());
         field = delete.getField();
         condition = delete.getCondition();
         value = delete.getValue();
@@ -37,12 +41,11 @@ public class DeleteManager implements StatementManager{
     }
 
     private void deleteUsingPrimaryKey(){
-        LockableIndex index = table.getRecordInfo(value);
+        LockableIndex index = table.getLockableIndex(value);
         try{
             index.writeLock();
             table.deleteRecord(value);
-
-        }finally {
+        }finally{
             index.writeUnlock();
         }
     }
@@ -78,10 +81,10 @@ public class DeleteManager implements StatementManager{
     private void acquireLocks(){
         RecordIterator recordIterator = table.getRecordIterator();
 
-        while (recordIterator.hasNext()) {
+        while (recordIterator.hasNext()){
             Record record = recordIterator.getNextRecord();
             if(record.checkCondition(field, condition, value)){
-                LockableIndex index = table.getRecordInfo(record.getPrimaryKey());
+                LockableIndex index = table.getLockableIndex(record.getPrimaryKey());
                 ReentrantReadWriteLock.WriteLock lock = index.getLock().writeLock();
                 try{
                     if(lock.tryLock(120, TimeUnit.SECONDS)){
@@ -91,7 +94,7 @@ public class DeleteManager implements StatementManager{
                         deleteUsingCondition();
                     }
                 }catch (InterruptedException e) {
-                    System.out.println(e);
+                   e.printStackTrace();
                 }
             }
         }

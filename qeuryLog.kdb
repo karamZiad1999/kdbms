@@ -1,2 +1,65 @@
-*select * from kareem
-*select * from karam
+*use kdbms_web insert into users (motasem@atypon.com,$2a$10$91IKozWJBKn5/bvHfbOz6uok5bm00EwN9dXXaSaVVcjPATuLYUAhC,1)
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT META FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users
+*USE kdbms_web SELECT * FROM users WHERE username = motasem@atypon.com
+*USE kdbms_web SELECT * FROM users
